@@ -12,6 +12,7 @@ import { ReactComponent as RsIcon } from './../../assets/icons/rs.svg';
 import { v4 as uuidv4 } from 'uuid';
 import Loading from '../../components/Loading/Loading';
 import Error from '../Error/Error';
+import menuItems from '../../utils/menuItems';
 
 const RestaurantPage = () => {
 	const { slug } = useParams();
@@ -31,7 +32,11 @@ const RestaurantPage = () => {
 			setRestaurantDetails(data?.data?.cards);
 			document.title = `${data?.data?.cards?.[0]?.card?.card?.info?.name} - Swiggy Clone - Vivek Kumar`;
 		} catch (err) {
-			setApiFaildes(err);
+			try {
+				setRestaurantDetails(menuItems[`dataOf${id}`]?.data?.cards);
+			} catch (err) {
+				setApiFaildes(err);
+			}
 		}
 		window.scrollTo(0, 0);
 	};

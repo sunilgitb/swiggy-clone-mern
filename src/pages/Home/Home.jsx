@@ -8,6 +8,7 @@ import { ALL_RESTAURANTS_API_LINK } from '../../utils/config';
 import Loading from '../../components/Loading/Loading';
 import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
+import staticRestaurant from './../../utils/restaurantList';
 
 const Home = () => {
 	const [carousels, setCarousels] = useState([]);
@@ -23,7 +24,19 @@ const Home = () => {
 			setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
 			setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
 		} catch (err) {
-			setApiFaildes(err);
+			try {
+				setCarousels(
+					staticRestaurant?.data?.cards?.[0]?.data?.data?.cards
+				);
+				setAllRestaurants(
+					staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+				);
+				setFilterAllRestaurants(
+					staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+				);
+			} catch (err) {
+				setApiFaildes(err);
+			}
 		}
 		window.scrollTo(0, 0);
 	};
