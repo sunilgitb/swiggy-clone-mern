@@ -5,16 +5,14 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Error from './pages/Error/Error';
 import Home from './pages/Home/Home';
-import RestaurantPage from './pages/RestaurantPage/RestaurantPage';
-import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 
 const AppLayout = () => {
 	return (
-		<>
+		<Provider store={store}>
 			<Header />
 			<Outlet />
 			<Footer />
-		</>
+		</Provider>
 	);
 };
 
@@ -22,47 +20,17 @@ const appRouter = createBrowserRouter([
 	{
 		path: '/',
 		element: <AppLayout />,
-		errorElement: (
-			<>
-				<Header />
-				<Error />
-				<Footer />
-			</>
-		),
+		errorElement: <Error />,
 		children: [
 			{
 				path: '/',
 				element: <Home />,
-			},
-			{
-				path: '/offers',
-				element: <Home />,
-			},
-			{
-				path: '/help',
-				element: <Home />,
-			},
-			{
-				path: '/signin',
-				element: <Home />,
-			},
-			{
-				path: '/checkout',
-				element: <CheckoutPage />,
-			},
-			{
-				path: '/restaurants/:slug',
-				element: <RestaurantPage />,
 			},
 		],
 	},
 ]);
 
 const App = () => {
-	return (
-		<Provider store={store}>
-			<RouterProvider router={appRouter} />
-		</Provider>
-	);
+	return <RouterProvider router={appRouter} />;
 };
 export default App;
