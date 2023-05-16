@@ -12,9 +12,13 @@ import {
 	removeFromCart,
 } from '../../redux/slice/cartSlice';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 let timer;
 const CheckoutPage = () => {
 	const cart = useSelector(state => state.cart.items);
+	const userAuth = useSelector(state => state.auth.isAuth);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [isOrdered, setIsOrdered] = useState(false);
@@ -150,8 +154,30 @@ const CheckoutPage = () => {
 					</div>
 					<div
 						onClick={() => {
+							if (!userAuth) {
+								return toast.error('Please login first!', {
+									position: 'bottom-right',
+									autoClose: 5000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'colored',
+								});
+							}
 							setIsOrdered(true);
 							clearTimeout(timer);
+							toast.success('Successfully Ordered!', {
+								position: 'bottom-right',
+								autoClose: 4000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+								theme: 'colored',
+							});
 							timer = setTimeout(() => {
 								setIsOrdered(false);
 								dispatch(clearCart());
@@ -162,6 +188,23 @@ const CheckoutPage = () => {
 						<button>Order</button>
 					</div>
 				</div>
+			</div>
+			<div
+				style={{
+					fontSize: '1.5rem',
+				}}>
+				<ToastContainer
+					position="bottom-right"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="colored"
+				/>
 			</div>
 		</PaddingTop>
 	);

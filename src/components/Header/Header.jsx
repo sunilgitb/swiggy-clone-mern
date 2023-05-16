@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useLocation } from 'react-router-dom';
@@ -9,15 +9,46 @@ import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { ReactComponent as SigninIcon } from './../../assets/icons/signin.svg';
 import { VscChevronDown } from 'react-icons/vsc';
 import { changeText } from '../../redux/slice/searchSlice';
+
+// auth
+import { auth } from '../../auth/firebase';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { login, logout } from '../../redux/slice/authSlice';
+
 let timeout;
 const Header = () => {
 	// NOTE: I am subscribing to store
 	const cartItems = useSelector(state => state.cart.items);
 	const [isSearchVisible, setIsSearchVisible] = useState(false);
 	const [searchText, setSearchText] = useState('');
+	const [showLogout, setShowLogout] = useState(true);
 
 	const dispatch = useDispatch();
 	const location = useLocation();
+
+	const userAuth = useSelector(state => state.auth);
+
+	const loginFun = async () => {
+		const provider = new GoogleAuthProvider();
+		try {
+			const result = await signInWithPopup(auth, provider);
+			dispatch(
+				login({
+					displayName: result.user.displayName,
+					email: result.user.email,
+					photoURL: result.user.photoURL,
+				})
+			);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	window.addEventListener('mouseover', e => {
+		e.stopPropagation();
+		e.preventDefault();
+		setShowLogout(false);
+	});
 
 	useEffect(() => {
 		if (location.pathname === '/') {
@@ -78,10 +109,32 @@ const Header = () => {
 						<HelpIcon className="icon" />
 						<span>Help</span>
 					</NavLink> */}
-					<NavLink to="/signin" className="link">
-						<SigninIcon className="icon" />
-						<span>Sign In</span>
-					</NavLink>
+					{!userAuth.isAuth ? (
+						<span onClick={loginFun} className="link">
+							<SigninIcon className="icon" />
+							<span>Sign In</span>
+						</span>
+					) : (
+						<span
+							onMouseOver={e => {
+								e.stopPropagation();
+								setShowLogout(true);
+							}}
+							onClick={() => {
+								dispatch(logout());
+							}}
+							className="link">
+							<img
+								src={userAuth?.user?.photoURL}
+								className="profile-img"
+							/>
+							<span>
+								{showLogout
+									? 'Log Out'
+									: userAuth?.user?.displayName}
+							</span>
+						</span>
+					)}
 					<NavLink to="/checkout" className="link">
 						<div>
 							<CartIcon

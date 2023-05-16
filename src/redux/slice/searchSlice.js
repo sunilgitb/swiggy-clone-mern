@@ -7,8 +7,8 @@ const cartSlice = createSlice({
 	name: 'search',
 	initialState,
 	reducers: {
-		changeText: (state, actions) => {
-			state.text = actions.payload;
+		changeText: (state, action) => {
+			state.text = action.payload;
 		},
 	},
 });

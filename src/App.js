@@ -40,10 +40,6 @@ const appRouter = createBrowserRouter([
 				element: <Offers />,
 			},
 			{
-				path: '/signin',
-				element: <Home />,
-			},
-			{
 				path: '/checkout',
 				element: <CheckoutPage />,
 			},

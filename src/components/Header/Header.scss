@@ -86,6 +86,13 @@
 					position: relative;
 				}
 
+				.profile-img {
+					height: 30px;
+					width: 30px;
+					object-fit: cover;
+					border-radius: 100%;
+				}
+
 				.item {
 					position: absolute;
 					top: 50%;
