@@ -9,6 +9,8 @@ import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { ReactComponent as SigninIcon } from './../../assets/icons/signin.svg';
 import { VscChevronDown } from 'react-icons/vsc';
 import { changeText } from '../../redux/slice/searchSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // auth
 import { auth } from '../../auth/firebase';
@@ -39,8 +41,27 @@ const Header = () => {
 					photoURL: result.user.photoURL,
 				})
 			);
+			toast.success('Successfully Logged In!', {
+				position: 'bottom-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'colored',
+			});
 		} catch (err) {
-			console.log(err);
+			toast.error(err.message, {
+				position: 'bottom-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'colored',
+			});
 		}
 	};
 
@@ -122,6 +143,16 @@ const Header = () => {
 							}}
 							onClick={() => {
 								dispatch(logout());
+								toast.warn('Successfully Logged Out!', {
+									position: 'bottom-right',
+									autoClose: 5000,
+									hideProgressBar: false,
+									closeOnClick: true,
+									pauseOnHover: true,
+									draggable: true,
+									progress: undefined,
+									theme: 'colored',
+								});
 							}}
 							className="link">
 							<img
@@ -156,6 +187,23 @@ const Header = () => {
 						<span>Cart</span>
 					</NavLink>
 				</div>
+			</div>
+			<div
+				style={{
+					fontSize: '1.5rem',
+				}}>
+				<ToastContainer
+					position="bottom-right"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="colored"
+				/>
 			</div>
 		</div>
 	);

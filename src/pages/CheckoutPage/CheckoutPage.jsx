@@ -168,7 +168,7 @@ const CheckoutPage = () => {
 							}
 							setIsOrdered(true);
 							clearTimeout(timer);
-							toast.success('Successfully Ordered!', {
+							toast.success('Order Successful!', {
 								position: 'bottom-right',
 								autoClose: 4000,
 								hideProgressBar: false,
