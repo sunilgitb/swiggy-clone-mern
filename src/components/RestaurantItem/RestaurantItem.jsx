@@ -11,8 +11,6 @@ import { useState } from 'react';
 const RestaurantItem = data => {
 	// console.log(data?.card?.info);
 	const dispatch = useDispatch();
-	const items = useSelector(state => state.cart);
-	const currentItem = items.find(el => el.info.id === data?.card?.info?.id);
 	return (
 		<div className="restaurant-item-wrapper">
 			<div className="restaurant-item">

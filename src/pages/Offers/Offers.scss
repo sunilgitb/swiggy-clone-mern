@@ -1,0 +1,35 @@
+.offers-wrapper {
+	width: 100%;
+	height: 300px;
+	background: #005062;
+
+	.offers {
+		width: 70%;
+		height: 100%;
+		margin: auto;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.left {
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			flex-direction: column;
+			.top {
+				font-size: 5rem;
+				font-weight: 700;
+				color: var(--color-white);
+			}
+			.bottom {
+				font-size: 2rem;
+				font-weight: 500;
+				color: #c8d9dd;
+			}
+		}
+
+		img {
+			height: 70%;
+		}
+	}
+}

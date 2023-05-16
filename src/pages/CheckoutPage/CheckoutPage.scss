@@ -1,6 +1,7 @@
 .checkout-wrapper {
 	width: 100%;
 	margin: 4rem 0;
+	min-height: 70vh;
 
 	.checkout {
 		width: 50%;
@@ -135,6 +136,64 @@
 				&:hover {
 					box-shadow: 0 2px 5px #a1a1a1c9;
 				}
+			}
+		}
+	}
+}
+
+// modal
+
+.success-modal {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #00000063;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999;
+
+	.modal {
+		min-height: 350px;
+		width: 500px;
+		background: #fff;
+		color: #113f15;
+		padding: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column;
+		border-radius: 5px;
+		position: relative;
+
+		ol {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 2rem;
+			flex-direction: column;
+			li {
+				font-size: 1.8rem;
+				font-weight: 600;
+				border-bottom: 1px dashed #00000063;
+			}
+		}
+
+		div {
+			&:first-child {
+				font-size: 2rem;
+				font-weight: 800;
+				color: var(--color-black);
+				padding-bottom: 10px;
+				border-bottom: 1px solid #000;
+			}
+			&:last-child {
+				font-size: 4rem;
+				font-weight: 800;
+				color: #14ac21;
+				text-shadow: 0 0 20px #85e78d;
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import Error from './pages/Error/Error';
 import Home from './pages/Home/Home';
 import RestaurantPage from './pages/RestaurantPage/RestaurantPage';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
+import Offers from './pages/Offers/Offers';
 
 const AppLayout = () => {
 	return (
@@ -36,11 +37,7 @@ const appRouter = createBrowserRouter([
 			},
 			{
 				path: '/offers',
-				element: <Home />,
-			},
-			{
-				path: '/help',
-				element: <Home />,
+				element: <Offers />,
 			},
 			{
 				path: '/signin',

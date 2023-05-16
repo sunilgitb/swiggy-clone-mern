@@ -2,7 +2,7 @@
 	position: relative;
 	width: 100%;
 	background: var(--color-carousel);
-	z-index: 999999;
+	// z-index: 999999;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -31,7 +31,7 @@
 			font-size: 2rem;
 			color: var(--color-carousel);
 			cursor: pointer;
-			z-index: 99;
+			z-index: 9;
 		}
 
 		.prev {

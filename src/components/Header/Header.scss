@@ -2,7 +2,7 @@
 	height: 80px;
 	width: 100%;
 	background: var(--color-white);
-	box-shadow: 0 2px 10px var(--color-grey);
+	box-shadow: 0 2px 10px var(--color-header-shadow);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -61,11 +61,23 @@
 			align-items: center;
 			justify-content: center;
 			gap: 3rem;
+
+			input {
+				padding: 5px;
+				font-size: 1.5rem;
+				outline: none;
+				border: 1px solid var(--color-grey-black);
+
+				&::placeholder {
+					color: var(--color-dark-grey);
+				}
+			}
 			.link {
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				gap: 7px;
+				cursor: pointer;
 
 				div {
 					display: flex;

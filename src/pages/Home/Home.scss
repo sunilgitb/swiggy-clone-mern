@@ -117,3 +117,41 @@
 		}
 	}
 }
+
+// Not found
+
+.not-found {
+	min-height: 300px;
+	width: 100%;
+	background: var(--color-grey);
+	color: var(--color-grey-black);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 1rem;
+	font-size: 2rem;
+
+	.links {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		.home {
+			cursor: pointer;
+			border: none;
+			background: var(--color-red);
+			text-transform: uppercase;
+			color: #fff;
+			font-weight: 600;
+			font-size: 1.5rem;
+			padding: 10px 20px;
+			margin-top: 2rem;
+
+			&:hover {
+				box-shadow: 0 2px 5px #a1a1a1c9;
+			}
+		}
+	}
+}

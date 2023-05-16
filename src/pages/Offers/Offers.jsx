@@ -1,30 +1,23 @@
-import './Home.scss';
+import './Offers.scss';
 import PaddingTop from '../../utils/PaddingTop';
 import CarouselCard from '../../components/CarouselCard/CarouselCard';
+import HotelCard from '../../components/HotelCard/HotelCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ALL_RESTAURANTS_API_LINK } from '../../utils/config';
 import Loading from '../../components/Loading/Loading';
 import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
-import staticRestaurant from './../../utils/restaurantList';
+import staticRestaurant from '../../utils/restaurantList';
 import Main from '../../components/Main/Main';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+const Offers = () => {
 	const [carousels, setCarousels] = useState([]);
 	const [allRestaurants, setAllRestaurants] = useState([]);
 	const [filterAllRestaurants, setFilterAllRestaurants] = useState([]);
 	const [activeFilter, setActiveFilter] = useState('relevance');
 	const [apiFailed, setApiFaildes] = useState('');
-	const [notFound, setNotFound] = useState(false);
 	document.title = `Swiggy Clone - Vivek Kumar`;
-
-	const searchText = useSelector(state => state.search.text);
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
-
 	const getAllRestaurants = async () => {
 		try {
 			const { data } = await axios.get(ALL_RESTAURANTS_API_LINK);
@@ -52,22 +45,6 @@ const Home = () => {
 	useEffect(() => {
 		getAllRestaurants();
 	}, []);
-
-	useEffect(() => {
-		if (searchText.trim() === '') {
-			setFilterAllRestaurants(allRestaurants);
-			setNotFound(false);
-			return;
-		}
-		const newList = allRestaurants.filter(el =>
-			el?.data?.name?.toLowerCase()?.includes(searchText?.toLowerCase())
-		);
-		if (newList.length === 0) {
-			setNotFound(true);
-			return;
-		}
-		setFilterAllRestaurants(newList);
-	}, [searchText]);
 
 	if (apiFailed) {
 		return <Error {...apiFailed} />;
@@ -102,37 +79,30 @@ const Home = () => {
 		</PaddingTop>
 	) : (
 		<PaddingTop>
-			<CarouselCard carousels={carousels} />
-			{!notFound ? (
-				<Main
-					topHeading={'restaurants'}
-					activeFilter={activeFilter}
-					setActiveFilter={setActiveFilter}
-					allRestaurants={allRestaurants}
-					filterAllRestaurants={filterAllRestaurants}
-					setFilterAllRestaurants={setFilterAllRestaurants}
-				/>
-			) : (
-				<div className="not-found">
-					<h1>Uh-oh!</h1>
-					<p>
-						Sorry! No restaurant found with{' '}
-						<strong>{searchText}</strong> name.
-					</p>
-					{console.log('asknoizx pmpoXN')}
-					{/* <div className="links">
-						<span
-							onClick={() => {
-								setFilterAllRestaurants(allRestaurants);
-							}}
-							className="home">
-							Home
-						</span>
-					</div> */}
+			<div className="offers-wrapper">
+				<div className="offers">
+					<div className="left">
+						<div className="top">Offers for you</div>
+						<div className="bottom">
+							Explore top deals and offers exclusively for you!
+						</div>
+					</div>
+					<img
+						src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/KHu24Gqw_md3ham"
+						alt="offers"
+					/>
 				</div>
-			)}
+			</div>
+			<Main
+				topHeading={'All offers'}
+				activeFilter={activeFilter}
+				setActiveFilter={setActiveFilter}
+				allRestaurants={allRestaurants}
+				filterAllRestaurants={filterAllRestaurants}
+				setFilterAllRestaurants={setFilterAllRestaurants}
+			/>
 		</PaddingTop>
 	);
 };
 
-export default Home;
+export default Offers;

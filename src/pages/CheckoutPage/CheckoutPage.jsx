@@ -11,11 +11,13 @@ import {
 	increaseQuantity,
 	removeFromCart,
 } from '../../redux/slice/cartSlice';
-
+import { useState } from 'react';
+let timer;
 const CheckoutPage = () => {
-	const cart = useSelector(state => state.cart);
+	const cart = useSelector(state => state.cart.items);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const [isOrdered, setIsOrdered] = useState(false);
 	if (cart.length === 0) {
 		return (
 			<PaddingTop>
@@ -44,6 +46,25 @@ const CheckoutPage = () => {
 
 	return (
 		<PaddingTop>
+			{isOrdered && (
+				<div
+					onClick={() => {
+						setIsOrdered(false);
+						dispatch(clearCart());
+						navigate('/');
+					}}
+					className="success-modal">
+					<div onClick={e => e.stopPropagation()} className="modal">
+						<div className="top">Order List</div>
+						<ol>
+							{cart.map(el => (
+								<li>{el?.info?.name}</li>
+							))}
+						</ol>
+						<div>Order Successful!</div>
+					</div>
+				</div>
+			)}
 			<div className="checkout-wrapper">
 				<div className="checkout">
 					<div className="nav">
@@ -117,12 +138,27 @@ const CheckoutPage = () => {
 									</div>
 								</div>
 								<div className="price">
-									₹{(el?.info?.price * el?.quantity) / 100}
+									₹
+									{el?.info?.price
+										? (el?.info?.price * el?.quantity) / 100
+										: (el?.info?.defaultPrice *
+												el?.quantity) /
+										  100}
 								</div>
 							</div>
 						))}
 					</div>
-					<div className="order-box">
+					<div
+						onClick={() => {
+							setIsOrdered(true);
+							clearTimeout(timer);
+							timer = setTimeout(() => {
+								setIsOrdered(false);
+								dispatch(clearCart());
+								navigate('/');
+							}, 5000);
+						}}
+						className="order-box">
 						<button>Order</button>
 					</div>
 				</div>
