@@ -85,6 +85,12 @@
 					justify-content: center;
 					position: relative;
 				}
+				.truncate {
+					width: 65px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
 
 				.profile-img {
 					height: 30px;

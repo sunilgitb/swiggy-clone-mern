@@ -155,11 +155,15 @@ const Header = () => {
 								});
 							}}
 							className="link">
-							<img
-								src={userAuth?.user?.photoURL}
-								className="profile-img"
-							/>
-							<span>
+							{userAuth?.user?.photoURL ? (
+								<img
+									src={userAuth?.user?.photoURL}
+									className="profile-img"
+								/>
+							) : (
+								<SigninIcon className="icon" />
+							)}
+							<span className="truncate">
 								{showLogout
 									? 'Log Out'
 									: userAuth?.user?.displayName}
