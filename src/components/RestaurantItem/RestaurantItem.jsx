@@ -58,31 +58,29 @@ const RestaurantItem = data => {
 					</span>
 				</div>
 				<div className="img">
-					{data?.card?.info?.imageId && (
+					{data?.card?.info?.imageId ? (
 						<img
 							src={`${IMG_LINK}/${data?.card?.info?.imageId}`}
 							alt={data?.card?.info?.name}
 						/>
+					) : (
+						<div className="img-dummy"></div>
 					)}
 
 					{!isAdded || quantity <= 0 ? (
-						<button
-							onClick={() => {
-								dispatch(
-									addToCart({
-										...data.card,
-										quantity: 1,
-									})
-								);
-							}}
-							className="add-btn"
-							style={{
-								transform: data?.card?.info?.imageId
-									? 'translateX(-50%)'
-									: 'translateX(-110%)',
-							}}>
-							ADD
-						</button>
+						<div className="add-btn">
+							<div
+								onClick={() => {
+									dispatch(
+										addToCart({
+											...data.card,
+											quantity: 1,
+										})
+									);
+								}}>
+								ADD
+							</div>
+						</div>
 					) : (
 						<div className="controls">
 							<div>

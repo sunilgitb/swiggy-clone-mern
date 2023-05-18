@@ -62,10 +62,17 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
+
 			img {
 				height: 100px;
 				width: 120px;
 				object-fit: cover;
+				border-radius: 10px;
+			}
+			.img-dummy {
+				height: 100px;
+				width: 120px;
+				background: var(--color-grey);
 				border-radius: 10px;
 			}
 			.add-btn {
@@ -74,7 +81,6 @@
 				bottom: -5px;
 				transform: translateX(-50%);
 				width: 100px;
-				padding: 10px 0;
 				color: #60b246;
 				background: var(--color-white);
 				border: 1px solid var(--color-dark-grey);
@@ -85,6 +91,18 @@
 				font-weight: 600;
 				cursor: pointer;
 
+				& > div {
+					height: 100%;
+					width: 100%;
+					padding: 10px 0;
+					background: var(--color-white);
+					border-radius: 5px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border: 1px solid var(--color-dark-grey);
+					box-shadow: 0 2px 5px var(--color-dark-grey);
+				}
 				&:hover {
 					box-shadow: 0 2px 5px #a1a1a1c9;
 				}
@@ -98,6 +116,7 @@
 				left: 50%;
 				bottom: -5px;
 				transform: translateX(-50%);
+
 				& > div {
 					background: var(--color-white);
 					border-radius: 5px;
