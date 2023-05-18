@@ -4,17 +4,33 @@ import { AiFillStar } from 'react-icons/ai';
 import { ReactComponent as VegIcon } from './../../assets/icons/veg.svg';
 import { ReactComponent as NonVegIcon } from './../../assets/icons/nonveg.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../redux/slice/cartSlice';
+import {
+	addToCart,
+	decreaseQuantity,
+	increaseQuantity,
+	removeFromCart,
+} from '../../redux/slice/cartSlice';
 import { BiMinus, BiPlus } from 'react-icons/bi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const RestaurantItem = data => {
 	// console.log(data?.card?.info);
 	const dispatch = useDispatch();
+	const items = useSelector(state => state.cart.items);
+	const [isAdded, setIsAdded] = useState(false);
+	const [quantity, setQuantity] = useState(0);
+	useEffect(() => {
+		const isPresentAt = items.findIndex(
+			el => el.info.id === data.card.info.id
+		);
+		setIsAdded(isPresentAt >= 0);
+		setQuantity(items?.[isPresentAt]?.quantity);
+		// console.log(isPresentAt);
+	}, [items]);
+
 	return (
 		<div className="restaurant-item-wrapper">
 			<div className="restaurant-item">
-				{/* <div className="restaurant-info">{data?.card?.info?.name}</div> */}
 				<div className="info">
 					<span className="tag">
 						{data?.card?.info?.itemAttribute?.vegClassifier ===
@@ -45,23 +61,65 @@ const RestaurantItem = data => {
 						/>
 					)}
 
-					<button
-						onClick={() => {
-							dispatch(
-								addToCart({
-									...data.card,
-									quantity: 1,
-								})
-							);
-						}}
-						className="add-btn"
-						style={{
-							transform: data?.card?.info?.imageId
-								? 'translateX(-50%)'
-								: 'translateX(-110%)',
-						}}>
-						ADD
-					</button>
+					{!isAdded || quantity <= 0 ? (
+						<button
+							onClick={() => {
+								dispatch(
+									addToCart({
+										...data.card,
+										quantity: 1,
+									})
+								);
+							}}
+							className="add-btn"
+							style={{
+								transform: data?.card?.info?.imageId
+									? 'translateX(-50%)'
+									: 'translateX(-110%)',
+							}}>
+							ADD
+						</button>
+					) : (
+						<div className="controls">
+							<div>
+								<span
+									onClick={() => {
+										if (
+											items.find(
+												el =>
+													el.info.id ===
+													data.card.info.id
+											)?.quantity > 1
+										) {
+											dispatch(
+												decreaseQuantity(
+													data.card.info.id
+												)
+											);
+										} else {
+											dispatch(
+												removeFromCart(
+													data.card.info.id
+												)
+											);
+										}
+									}}
+									className="btns">
+									<BiMinus />
+								</span>
+								<span>{quantity}</span>
+								<span
+									onClick={() => {
+										dispatch(
+											increaseQuantity(data.card.info.id)
+										);
+									}}
+									className="btns">
+									<BiPlus />
+								</span>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
