@@ -17,10 +17,15 @@ const HotelCard = ({ hotel }) => {
 				</div>
 			)}
 			<div className="hotel-card">
-				<img
-					src={`${IMG_LINK}/${hotel?.data?.cloudinaryImageId}`}
-					alt={hotel?.data?.name}
-				/>
+				{hotel?.data?.cloudinaryImageId ? (
+					<img
+						src={`${IMG_LINK}/${hotel?.data?.cloudinaryImageId}`}
+						alt={hotel?.data?.name}
+					/>
+				) : (
+					<div className="img-cover">NO COVER IMAGE</div>
+				)}
+
 				<div className="title">
 					<span>{hotel?.data?.name}</span>
 					<span>{hotel?.data?.cuisines?.join(', ')}</span>

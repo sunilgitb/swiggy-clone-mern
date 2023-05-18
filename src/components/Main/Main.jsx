@@ -1,6 +1,7 @@
 import './Main.scss';
 import HotelCard from '../HotelCard/HotelCard';
 import { v4 as uuidv4 } from 'uuid';
+import Loading from '../Loading/Loading';
 
 const Main = ({
 	activeFilter,
@@ -9,13 +10,15 @@ const Main = ({
 	filterAllRestaurants,
 	setFilterAllRestaurants,
 	topHeading,
+	isLoading,
+	totalOpenRestaurants,
 }) => {
 	return (
 		<div className="main-wrapper">
 			<div id="all-restaurants" className="filters">
 				<span>
 					{topHeading === 'restaurants'
-						? `${filterAllRestaurants?.length} restaurants`
+						? `${totalOpenRestaurants} restaurants`
 						: `${topHeading} (${filterAllRestaurants?.length})`}
 				</span>
 				<div>
@@ -108,6 +111,23 @@ const Main = ({
 				{filterAllRestaurants.map(restaurant => (
 					<HotelCard key={uuidv4()} hotel={restaurant} />
 				))}
+				{isLoading && (
+					<div
+						className="sckelton"
+						style={{
+							width: '100%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							margin: '1rem auto',
+							gap: '2rem',
+							flexWrap: 'wrap',
+						}}>
+						{new Array(12).fill(0).map(() => (
+							<Loading key={uuidv4()} />
+						))}
+					</div>
+				)}
 			</div>
 		</div>
 	);

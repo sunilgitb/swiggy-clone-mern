@@ -10,7 +10,6 @@ import Error from '../Error/Error';
 import staticRestaurant from './../../utils/restaurantList';
 import Main from '../../components/Main/Main';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import FloatingCart from '../../components/FloatingCart/FloatingCart';
 
 const Home = () => {
@@ -20,6 +19,9 @@ const Home = () => {
 	const [activeFilter, setActiveFilter] = useState('relevance');
 	const [apiFailed, setApiFaildes] = useState('');
 	const [notFound, setNotFound] = useState(false);
+	const [offset, setOffset] = useState(0);
+	const [isLoading, setIsLoading] = useState(false);
+	const [totalOpenRestaurants, setTotalOpenRestaurants] = useState(0);
 	document.title = `Swiggy Clone - Vivek Kumar`;
 
 	const searchText = useSelector(state => state.search.text);
@@ -27,29 +29,69 @@ const Home = () => {
 		try {
 			const { data } = await axios.get(ALL_RESTAURANTS_API_LINK);
 			setCarousels(data?.data?.cards?.[0]?.data?.data?.cards);
-			setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
-			setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
+			// setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
+			// setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
+			setTotalOpenRestaurants(
+				data?.data?.cards?.[2]?.data?.data?.totalOpenRestaurants
+			);
 		} catch (err) {
 			try {
 				setCarousels(
 					staticRestaurant?.data?.cards?.[0]?.data?.data?.cards
 				);
-				setAllRestaurants(
-					staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-				);
-				setFilterAllRestaurants(
-					staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-				);
+				// setAllRestaurants(
+				// 	staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+				// );
+				// setFilterAllRestaurants(
+				// 	staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+				// );
 			} catch (err) {
 				setApiFaildes(err);
 			}
 		}
 		window.scrollTo(0, 0);
 	};
-	// console.log(allRestaurants);
+	const getRestaurantMore = async () => {
+		setIsLoading(true);
+		try {
+			const { data } = await axios.get(
+				`https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=25.5940947&lng=85.1375645&offset=${offset}&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING`
+			);
+			setAllRestaurants(prev => [
+				...prev,
+				...data?.data?.cards.map(el => el.data),
+			]);
+			setFilterAllRestaurants(prev => [
+				...prev,
+				...data?.data?.cards.map(el => el.data),
+			]);
+			setIsLoading(false);
+		} catch (err) {
+			setApiFaildes(err);
+			setIsLoading(false);
+		}
+	};
+
+	const handleScroll = async () => {
+		if (
+			window.innerHeight + document.documentElement.scrollTop + 1 >=
+			document.documentElement.scrollHeight
+		) {
+			setOffset(prev => prev + 16);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
+
 	useEffect(() => {
 		getAllRestaurants();
 	}, []);
+	useEffect(() => {
+		getRestaurantMore();
+	}, [offset]);
 
 	useEffect(() => {
 		if (searchText.trim() === '') {
@@ -112,6 +154,8 @@ const Home = () => {
 					allRestaurants={allRestaurants}
 					filterAllRestaurants={filterAllRestaurants}
 					setFilterAllRestaurants={setFilterAllRestaurants}
+					isLoading={isLoading}
+					totalOpenRestaurants={totalOpenRestaurants}
 				/>
 			) : (
 				<div className="not-found">
