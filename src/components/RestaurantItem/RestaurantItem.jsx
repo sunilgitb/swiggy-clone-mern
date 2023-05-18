@@ -47,7 +47,11 @@ const RestaurantItem = data => {
 
 					<span className="title">{data?.card?.info?.name}</span>
 					<span className="price">
-						{data?.card?.info?.price / 100} ₹
+						{data?.card?.info?.price
+							? data?.card?.info?.price / 100
+							: data?.card?.info?.variantsV2?.pricingModels?.[0]
+									?.price / 100}{' '}
+						₹
 					</span>
 					<span className="desc">
 						{data?.card?.info?.description}

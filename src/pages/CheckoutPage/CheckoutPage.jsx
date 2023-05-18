@@ -145,8 +145,12 @@ const CheckoutPage = () => {
 									₹
 									{(el?.info?.price
 										? (el?.info?.price * el?.quantity) / 100
-										: (el?.info?.defaultPrice *
+										: el?.info?.defaultPrice
+										? (el?.info?.defaultPrice *
 												el?.quantity) /
+										  100
+										: el?.info?.variantsV2
+												?.pricingModels?.[0]?.price /
 										  100
 									).toLocaleString()}
 								</div>
@@ -161,7 +165,13 @@ const CheckoutPage = () => {
 								cart?.reduce((acc, el) => {
 									return el?.info?.price
 										? acc + el?.info?.price * el?.quantity
-										: el?.info?.defaultPrice * el?.quantity;
+										: el?.info?.defaultPrice
+										? acc +
+										  el?.info?.defaultPrice * el?.quantity
+										: acc +
+										  el?.info?.variantsV2
+												?.pricingModels?.[0]?.price *
+												el?.quantity;
 								}, 0) / 100
 							).toLocaleString()}
 						</span>
