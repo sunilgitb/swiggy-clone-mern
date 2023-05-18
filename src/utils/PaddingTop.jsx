@@ -5,6 +5,7 @@ const PaddingTop = props => {
 		<div
 			style={{
 				paddingTop: '80px',
+				background: '#fff',
 			}}>
 			{props.children}
 		</div>

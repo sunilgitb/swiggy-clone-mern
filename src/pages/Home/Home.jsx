@@ -11,6 +11,7 @@ import staticRestaurant from './../../utils/restaurantList';
 import Main from '../../components/Main/Main';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import FloatingCart from '../../components/FloatingCart/FloatingCart';
 
 const Home = () => {
 	const [carousels, setCarousels] = useState([]);
@@ -22,9 +23,6 @@ const Home = () => {
 	document.title = `Swiggy Clone - Vivek Kumar`;
 
 	const searchText = useSelector(state => state.search.text);
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
-
 	const getAllRestaurants = async () => {
 		try {
 			const { data } = await axios.get(ALL_RESTAURANTS_API_LINK);
@@ -75,29 +73,32 @@ const Home = () => {
 
 	return filterAllRestaurants?.length === 0 ? (
 		<PaddingTop>
-			<div className="carousel-loading">
-				<div>
-					<div className="animate"></div>
-					<img
-						src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
-						alt="ice-cream"
-					/>
+			<div className="carousel-loading-wrapper">
+				<div className="carousel-loading">
+					<div>
+						<div className="animate"></div>
+						<img
+							src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
+							alt="ice-cream"
+						/>
+					</div>
+					<div>Looking for great food near you...</div>
 				</div>
-				<div>Looking for great food near you...</div>
-			</div>
-			<div
-				style={{
-					width: '70%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					margin: '1rem auto',
-					gap: '1rem',
-					flexWrap: 'wrap',
-				}}>
-				{new Array(12).fill(0).map(() => (
-					<Loading key={uuidv4()} />
-				))}
+				<div
+					className="sckelton"
+					style={{
+						width: '70%',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						margin: '1rem auto',
+						gap: '1rem',
+						flexWrap: 'wrap',
+					}}>
+					{new Array(12).fill(0).map(() => (
+						<Loading key={uuidv4()} />
+					))}
+				</div>
 			</div>
 		</PaddingTop>
 	) : (
@@ -119,18 +120,9 @@ const Home = () => {
 						Sorry! No restaurant found with{' '}
 						<strong>{searchText}</strong> name.
 					</p>
-					{console.log('asknoizx pmpoXN')}
-					{/* <div className="links">
-						<span
-							onClick={() => {
-								setFilterAllRestaurants(allRestaurants);
-							}}
-							className="home">
-							Home
-						</span>
-					</div> */}
 				</div>
 			)}
+			<FloatingCart />
 		</PaddingTop>
 	);
 };

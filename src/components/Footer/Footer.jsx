@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom';
 import './Footer.scss';
 import { FaTwitter, FaLinkedinIn, FaInstagram, FaGithub } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Footer = () => {
+	const items = useSelector(state => state.cart.items);
 	return (
-		<section className="footer-wrapper">
+		<section
+			className="footer-wrapper"
+			style={{
+				marginBottom: items?.length > 0 ? '40px' : '',
+			}}>
 			<div className="footer">
 				<a href={'#'}>
 					<img
@@ -12,7 +18,16 @@ const Footer = () => {
 						alt=""
 					/>
 				</a>
-				<div className="copy"> &copy; 2023 Swiggy Clone by ViveK</div>
+				<div className="copy">
+					<div> &copy; 2023 Swiggy Clone </div>
+					<div
+						style={{
+							textAlign: 'center',
+							padding: '5px 0',
+						}}>
+						by ViveK
+					</div>
+				</div>
 				<div className="socials">
 					<Link to={'https://twitter.com/V1V3K__'} target="_blank">
 						<FaTwitter className="icon" />

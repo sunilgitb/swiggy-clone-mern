@@ -33,3 +33,13 @@
 		}
 	}
 }
+
+@media screen and (max-width: 1024px) {
+	.footer-wrapper {
+		height: 200px;
+		.footer {
+			flex-direction: column;
+			justify-content: space-evenly;
+		}
+	}
+}

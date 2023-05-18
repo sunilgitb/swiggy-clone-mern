@@ -2,7 +2,7 @@
 	min-height: 70vh;
 	width: 100%;
 	position: relative;
-	z-index: 999999;
+	z-index: 98;
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
@@ -13,16 +13,19 @@
 		justify-content: center;
 		flex-direction: column;
 		height: 350px;
-		width: 100%;
+		width: 80%;
+		margin: 0 auto;
 		font-size: 1.5rem;
 		gap: 2rem;
 		position: relative;
 
 		h1 {
 			color: var(--color-black-link);
+			text-align: center;
 		}
 		p {
 			color: var(--color-grey-black);
+			text-align: center;
 		}
 
 		.img {

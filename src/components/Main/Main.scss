@@ -5,6 +5,7 @@
 	justify-content: center;
 	flex-direction: column;
 	gap: 1rem;
+	background: #fff;
 
 	.filters {
 		text-align: center;
@@ -44,6 +45,11 @@
 				border-bottom: 1px solid var(--color-black);
 			}
 		}
+		@media screen and (max-width: 1250px) {
+			& > div {
+				display: none;
+			}
+		}
 	}
 	.cards {
 		width: 100%;
@@ -53,5 +59,20 @@
 		justify-content: space-between;
 		gap: 1rem;
 		margin: 1rem auto;
+	}
+}
+
+@media screen and (max-width: 1300px) {
+	.main-wrapper {
+		width: 80%;
+	}
+}
+@media screen and (max-width: 865px) {
+	.main-wrapper {
+		width: 90%;
+		.cards {
+			justify-content: center;
+			gap: 2rem;
+		}
 	}
 }

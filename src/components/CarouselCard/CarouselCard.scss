@@ -90,6 +90,40 @@
 			animation: rightAnimate 0.4s ease-out;
 		}
 	}
+
+	.all-res {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		margin-top: 3rem;
+		img {
+			height: 100%;
+			width: 100%;
+		}
+	}
+}
+@media screen and (max-width: 1500px) {
+	.carousel-wrapper {
+		background: #fff;
+		width: 70%;
+		margin: auto;
+		.carousel {
+			display: none;
+		}
+		.all-res {
+			display: flex;
+		}
+	}
+}
+@media screen and (max-width: 1300px) {
+	.carousel-wrapper {
+		width: 80%;
+	}
+}
+@media screen and (max-width: 865px) {
+	.carousel-wrapper {
+		width: 90%;
+	}
 }
 
 @keyframes leftAnimate {

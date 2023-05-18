@@ -59,7 +59,7 @@ const CheckoutPage = () => {
 					}}
 					className="success-modal">
 					<div onClick={e => e.stopPropagation()} className="modal">
-						<div className="top">Order List</div>
+						<div className="top">Order List - </div>
 						<ol>
 							{cart.map(el => (
 								<li>{el?.info?.name}</li>
@@ -143,14 +143,28 @@ const CheckoutPage = () => {
 								</div>
 								<div className="price">
 									₹
-									{el?.info?.price
+									{(el?.info?.price
 										? (el?.info?.price * el?.quantity) / 100
 										: (el?.info?.defaultPrice *
 												el?.quantity) /
-										  100}
+										  100
+									).toLocaleString()}
 								</div>
 							</div>
 						))}
+					</div>
+					<div className="price-box">
+						<span className="price-tag">Total Amount</span>
+						<span className="price">
+							₹{' '}
+							{(
+								cart?.reduce((acc, el) => {
+									return el?.info?.price
+										? acc + el?.info?.price * el?.quantity
+										: el?.info?.defaultPrice * el?.quantity;
+								}, 0) / 100
+							).toLocaleString()}
+						</span>
 					</div>
 					<div
 						onClick={() => {

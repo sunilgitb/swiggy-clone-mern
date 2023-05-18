@@ -73,6 +73,9 @@ const CarouselCard = ({ carousels }) => {
 					</button>
 				)}
 			</div>
+			<a href="#all-restaurants" className="all-res">
+				<img src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/rng/md/carousel/production/faxdufvkcllzse67eqry" />
+			</a>
 		</div>
 	);
 };

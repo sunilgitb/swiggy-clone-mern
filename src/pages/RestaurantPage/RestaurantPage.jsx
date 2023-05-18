@@ -1,6 +1,6 @@
 import axios from 'axios';
 import './RestaurantPage.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { RESTAURANT_DETAILS_API } from '../../utils/config';
 import { useEffect, useState } from 'react';
 import PaddingTop from '../../utils/PaddingTop';
@@ -13,13 +13,15 @@ import { v4 as uuidv4 } from 'uuid';
 import Loading from '../../components/Loading/Loading';
 import Error from '../Error/Error';
 import menuItems from '../../utils/menuItems';
+import FloatingCart from '../../components/FloatingCart/FloatingCart';
 
 const RestaurantPage = () => {
 	const { slug } = useParams();
 	const id = slug.split('-').at(-1);
 	const [restaurantDetails, setRestaurantDetails] = useState([]);
 	const [apiFailed, setApiFaildes] = useState('');
-
+	let idx = restaurantDetails?.findIndex(el => el.groupedCard !== undefined);
+	const navigate = useNavigate();
 	// console.log(
 	// 	restaurantDetails?.[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]
 	// 		?.card?.card?.itemCards?.[0]?.card?.info?.variants
@@ -79,6 +81,13 @@ const RestaurantPage = () => {
 		<PaddingTop>
 			<div className="restaurant-details-wrapper">
 				<div className="restaurant-details">
+					<button
+						className="bck"
+						onClick={() => {
+							navigate(-1);
+						}}>
+						Back
+					</button>
 					<div className="restaurant-info">
 						<div>
 							<div className="left">
@@ -155,19 +164,8 @@ const RestaurantPage = () => {
 								</span>
 							</div>
 							<div className="bottom">
-								{restaurantDetails?.[1]?.card?.card?.gridElements?.infoWithStyle?.offers
-									?.slice(
-										0,
-										restaurantDetails?.[1]?.card?.card
-											?.gridElements?.infoWithStyle
-											?.offers.length > 4
-											? 4
-											: restaurantDetails?.[1]?.card?.card
-													?.gridElements
-													?.infoWithStyle?.offers
-													.length
-									)
-									?.map(el => (
+								{restaurantDetails?.[1]?.card?.card?.gridElements?.infoWithStyle?.offers?.map(
+									el => (
 										<div
 											className="offer-card"
 											key={uuidv4()}>
@@ -179,12 +177,15 @@ const RestaurantPage = () => {
 												{el?.info?.description}
 											</span>
 										</div>
-									))}
+									)
+								)}
 							</div>
 						</div>
 					</div>
 					<div className="items">
-						{restaurantDetails?.[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+						{restaurantDetails?.[
+							idx
+						]?.groupedCard?.cardGroupMap?.REGULAR?.cards
 							?.slice(1, -1)
 							?.map(el => (
 								<div key={uuidv4()}>
@@ -225,6 +226,7 @@ const RestaurantPage = () => {
 					</div>
 				</div>
 			</div>
+			<FloatingCart />
 		</PaddingTop>
 	);
 };

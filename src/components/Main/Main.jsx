@@ -12,7 +12,7 @@ const Main = ({
 }) => {
 	return (
 		<div className="main-wrapper">
-			<div className="filters">
+			<div id="all-restaurants" className="filters">
 				<span>
 					{topHeading === 'restaurants'
 						? `${filterAllRestaurants?.length} restaurants`

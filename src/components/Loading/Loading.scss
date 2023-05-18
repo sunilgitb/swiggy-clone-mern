@@ -1,6 +1,7 @@
 .loading-wrapper {
 	position: relative;
 	margin: 4rem 0;
+	overflow: hidden;
 
 	.sine-rod {
 		height: 376px;
@@ -8,7 +9,7 @@
 		background: #ffffffde;
 		box-shadow: 0 0 10px 10px #ffffffde;
 		position: absolute;
-		animation: loading 01s infinite alternate;
+		animation: loading 1s infinite alternate;
 		overflow: hidden;
 		transform: rotate(10deg);
 	}
