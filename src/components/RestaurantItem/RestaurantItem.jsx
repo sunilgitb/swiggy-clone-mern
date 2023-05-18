@@ -64,7 +64,7 @@ const RestaurantItem = data => {
 							alt={data?.card?.info?.name}
 						/>
 					) : (
-						<div className="img-dummy"></div>
+						<div className="img-dummy">NO IMG</div>
 					)}
 
 					{!isAdded || quantity <= 0 ? (

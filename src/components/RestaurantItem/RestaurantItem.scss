@@ -74,6 +74,12 @@
 				width: 120px;
 				background: var(--color-grey);
 				border-radius: 10px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.5rem;
+				color: var(--color-dark-grey);
+				font-weight: 600;
 			}
 			.add-btn {
 				position: absolute;

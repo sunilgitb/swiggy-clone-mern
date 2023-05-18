@@ -6,11 +6,16 @@ import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { Link } from 'react-router-dom';
 
 const HotelCard = ({ hotel }) => {
-	// console.log(hotel);
 	return (
 		<Link
 			to={`/restaurants/${hotel?.data?.slugs?.restaurant}-${hotel?.data?.id}`}
 			className="hotel-card-wrapper">
+			{hotel?.data?.promoted && (
+				<div className="promotion-tag">
+					<div className="text">PROMOTED</div>
+					<div className="style"></div>
+				</div>
+			)}
 			<div className="hotel-card">
 				<img
 					src={`${IMG_LINK}/${hotel?.data?.cloudinaryImageId}`}
