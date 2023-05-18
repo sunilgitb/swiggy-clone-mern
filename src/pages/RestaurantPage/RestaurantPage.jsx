@@ -52,29 +52,31 @@ const RestaurantPage = () => {
 
 	return restaurantDetails?.length === 0 ? (
 		<PaddingTop>
-			<div className="carousel-loading">
-				<div>
-					<div className="animate"></div>
-					<img
-						src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
-						alt="ice-cream"
-					/>
+			<div className="carousel-loading-wrapper">
+				<div className="carousel-loading">
+					<div>
+						<div className="animate"></div>
+						<img
+							src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/icecream_wwomsa"
+							alt="ice-cream"
+						/>
+					</div>
+					<div>Looking for great food near you...</div>
 				</div>
-				<div>Looking for great food near you...</div>
-			</div>
-			<div
-				style={{
-					width: '70%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					margin: '1rem auto',
-					gap: '1rem',
-					flexWrap: 'wrap',
-				}}>
-				{new Array(12).fill(0).map(() => (
-					<Loading key={uuidv4()} />
-				))}
+				<div
+					style={{
+						width: '70%',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						margin: '1rem auto',
+						gap: '1rem',
+						flexWrap: 'wrap',
+					}}>
+					{new Array(12).fill(0).map(() => (
+						<Loading key={uuidv4()} />
+					))}
+				</div>
 			</div>
 		</PaddingTop>
 	) : (

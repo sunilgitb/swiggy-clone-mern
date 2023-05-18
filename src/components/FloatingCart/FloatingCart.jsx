@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import './FloatingCart.scss';
-import { BsFillHandbagFill } from 'react-icons/bs';
+import { FiShoppingBag } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 const FloatingCart = () => {
@@ -27,7 +27,7 @@ const FloatingCart = () => {
 							}}>
 							VIEW CART
 						</span>{' '}
-						<BsFillHandbagFill className="icon" />
+						<FiShoppingBag className="icon" />
 					</span>
 				</div>
 			</div>
