@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
 import staticRestaurant from '../../utils/restaurantList';
 import Main from '../../components/Main/Main';
+import FloatingCart from '../../components/FloatingCart/FloatingCart';
 
 const Offers = () => {
 	const [carousels, setCarousels] = useState([]);
@@ -103,6 +104,7 @@ const Offers = () => {
 				filterAllRestaurants={filterAllRestaurants}
 				setFilterAllRestaurants={setFilterAllRestaurants}
 			/>
+			<FloatingCart />
 		</PaddingTop>
 	);
 };
