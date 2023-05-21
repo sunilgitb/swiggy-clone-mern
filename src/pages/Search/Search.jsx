@@ -75,6 +75,9 @@ const Search = () => {
 		timer.current = setTimeout(() => {
 			if (searchText.trim() !== '') {
 				getSearchResults(searchText);
+				navigate(`/search?query=${searchText}`);
+			} else {
+				navigate(`/search`);
 			}
 		}, 1000);
 	}, [searchText]);
