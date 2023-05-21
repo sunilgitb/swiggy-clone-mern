@@ -346,3 +346,125 @@
 		transform: translate(0, -100%);
 	}
 }
+.black-mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #12121d98;
+	z-index: 100;
+}
+.signin-side-wrapper {
+	.signin-side {
+		width: 40%;
+		height: 100%;
+		background: #ffffff;
+		position: fixed;
+		top: 0;
+		right: 0;
+		display: grid;
+		grid-template-rows: 150px 1fr;
+		padding: 4rem;
+		transform: translateX(100%);
+		transition: transform 0.3s ease-in-out;
+		z-index: 101;
+
+		.top {
+			width: 350px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.left {
+				height: 100%;
+				display: flex;
+				align-items: flex-start;
+				justify-content: flex-start;
+				flex-direction: column;
+				gap: 2rem;
+				margin-right: 5rem;
+
+				.icon {
+					font-size: 2rem;
+					cursor: pointer;
+				}
+				.login-box {
+					.login {
+						font-size: 3rem;
+						color: var(--color-black-link);
+						font-weight: 600;
+						margin-bottom: 0.5rem;
+					}
+					.create {
+						font-size: 1.3rem;
+
+						span {
+							&:first-child {
+								margin-right: 5px;
+							}
+							&:last-child {
+								color: var(--color-red);
+								cursor: pointer;
+								font-weight: 500;
+							}
+						}
+					}
+				}
+				.style {
+					width: 30px;
+					border-radius: 50px;
+					height: 2px;
+					background: #000;
+				}
+			}
+			.right {
+				img {
+					height: 100px;
+					width: 100px;
+					object-fit: cover;
+				}
+			}
+		}
+	}
+
+	.visible-side {
+		transform: translateX(0);
+	}
+}
+
+@media screen and (max-width: 1080px) {
+	.signin-side-wrapper {
+		.signin-side {
+			width: 50%;
+		}
+	}
+}
+@media screen and (max-width: 860px) {
+	.signin-side-wrapper {
+		.signin-side {
+			width: 70%;
+		}
+	}
+}
+@media screen and (max-width: 768px) {
+	.signin-side-wrapper {
+		.signin-side {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			.top .left .style {
+				margin-bottom: 3rem;
+			}
+		}
+	}
+}
+@media screen and (max-width: 375px) {
+	.signin-side-wrapper {
+		.signin-side {
+			.top {
+				width: 310px;
+			}
+		}
+	}
+}

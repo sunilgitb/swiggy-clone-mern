@@ -33,3 +33,6 @@ a {
 	text-decoration: none;
 	color: var(--color-black-link);
 }
+.err {
+	border: 1px solid red !important;
+}

@@ -11,6 +11,8 @@ import Offers from './pages/Offers/Offers';
 import Search from './pages/Search/Search';
 import { useEffect } from 'react';
 import { updateCart } from './redux/slice/cartSlice';
+import { ToastContainer } from 'react-toastify';
+import Profile from './pages/Profile/Profile';
 
 const AppLayout = () => {
 	const cart = useSelector(state => state.cart.items);
@@ -35,6 +37,23 @@ const AppLayout = () => {
 			<Header />
 			<Outlet />
 			<Footer />
+			<div
+				style={{
+					fontSize: '1.5rem',
+				}}>
+				<ToastContainer
+					position="bottom-right"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="colored"
+				/>
+			</div>
 		</>
 	);
 };
@@ -66,6 +85,10 @@ const appRouter = createBrowserRouter([
 			{
 				path: '/search',
 				element: <Search />,
+			},
+			{
+				path: '/account',
+				element: <Profile />,
 			},
 			{
 				path: '/restaurants/:slug',

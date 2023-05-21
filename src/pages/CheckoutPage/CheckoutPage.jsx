@@ -61,9 +61,12 @@ const CheckoutPage = () => {
 					className="success-modal">
 					<div onClick={e => e.stopPropagation()} className="modal">
 						<div className="top">Order List - </div>
-						<ol>
+						<ol
+							style={{
+								padding: '10px',
+							}}>
 							{cart.map(el => (
-								<li>{el?.info?.name}</li>
+								<li key={uuidv4()}>{el?.info?.name}</li>
 							))}
 						</ol>
 						<div>Order Successful!</div>

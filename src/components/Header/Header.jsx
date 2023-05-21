@@ -8,8 +8,7 @@ import { ReactComponent as SearchIcon } from './../../assets/icons/search.svg';
 import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { ReactComponent as SigninIcon } from './../../assets/icons/signin.svg';
 import { VscChevronDown } from 'react-icons/vsc';
-import { changeText } from '../../redux/slice/searchSlice';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoThreeBars } from 'react-icons/go';
 import { RxCross1 } from 'react-icons/rx';
@@ -18,60 +17,18 @@ import { RxCross1 } from 'react-icons/rx';
 import { auth } from '../../auth/firebase';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { login, logout } from '../../redux/slice/authSlice';
+import SignInBox from '../SignInBox/SignInBox';
+import SignUpBox from '../SignUpBox/SignUpBox';
 
 let timeout;
 const Header = () => {
 	// NOTE: I am subscribing to store
 	const cartItems = useSelector(state => state.cart.items);
-	const [isSearchVisible, setIsSearchVisible] = useState(false);
-	const [showLogout, setShowLogout] = useState(true);
 	const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
-
-	const dispatch = useDispatch();
-	const location = useLocation();
+	const [isSigninSideVisible, setIsSigninSideVisible] = useState(false);
+	const [isLoginScreen, setIsLoginScreen] = useState(true);
 
 	const userAuth = useSelector(state => state.auth);
-
-	const loginFun = async () => {
-		const provider = new GoogleAuthProvider();
-		try {
-			const result = await signInWithPopup(auth, provider);
-			dispatch(
-				login({
-					displayName: result.user.displayName,
-					email: result.user.email,
-					photoURL: result.user.photoURL,
-				})
-			);
-			toast.success('Successfully Logged In!', {
-				position: 'bottom-right',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'colored',
-			});
-		} catch (err) {
-			toast.error(err.message, {
-				position: 'bottom-right',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: 'colored',
-			});
-		}
-	};
-
-	window.addEventListener('mouseover', e => {
-		e.stopPropagation();
-		e.preventDefault();
-		setShowLogout(false);
-	});
 
 	return (
 		<>
@@ -103,30 +60,16 @@ const Header = () => {
 						</NavLink>
 						<div className="name">
 							{!userAuth.isAuth ? (
-								<span onClick={loginFun} className="link">
+								<span
+									onClick={() => {
+										setIsSigninSideVisible(true);
+									}}
+									className="link">
 									<SigninIcon className="icon" />
 									<span>Sign In</span>
 								</span>
 							) : (
-								<span
-									onMouseOver={e => {
-										e.stopPropagation();
-										setShowLogout(true);
-									}}
-									onClick={() => {
-										dispatch(logout());
-										toast.warn('Successfully Logged Out!', {
-											position: 'bottom-right',
-											autoClose: 5000,
-											hideProgressBar: false,
-											closeOnClick: true,
-											pauseOnHover: true,
-											draggable: true,
-											progress: undefined,
-											theme: 'colored',
-										});
-									}}
-									className="link">
+								<NavLink to={'/account'} className="link">
 									{userAuth?.user?.photoURL ? (
 										<img
 											src={userAuth?.user?.photoURL}
@@ -136,11 +79,9 @@ const Header = () => {
 										<SigninIcon className="icon" />
 									)}
 									<span className="truncate">
-										{showLogout
-											? 'Log Out'
-											: userAuth?.user?.displayName}
+										{userAuth?.user?.displayName}
 									</span>
-								</span>
+								</NavLink>
 							)}
 						</div>
 						<div className="cart">
@@ -179,24 +120,6 @@ const Header = () => {
 					</div>
 					{/* Mobile Nav */}
 				</div>
-
-				<div
-					style={{
-						fontSize: '1.5rem',
-					}}>
-					<ToastContainer
-						position="bottom-right"
-						autoClose={5000}
-						hideProgressBar={false}
-						newestOnTop={false}
-						closeOnClick
-						rtl={false}
-						pauseOnFocusLoss
-						draggable
-						pauseOnHover
-						theme="colored"
-					/>
-				</div>
 			</div>
 
 			<div
@@ -225,7 +148,7 @@ const Header = () => {
 						{!userAuth.isAuth ? (
 							<span
 								onClick={() => {
-									loginFun();
+									setIsSigninSideVisible(true);
 									setIsMobileNavVisible(false);
 								}}
 								className="link">
@@ -233,24 +156,9 @@ const Header = () => {
 								<span>Sign In</span>
 							</span>
 						) : (
-							<span
-								onMouseOver={e => {
-									e.stopPropagation();
-									setShowLogout(true);
-								}}
-								onClick={() => {
-									dispatch(logout());
-									toast.warn('Successfully Logged Out!', {
-										position: 'bottom-right',
-										autoClose: 5000,
-										hideProgressBar: false,
-										closeOnClick: true,
-										pauseOnHover: true,
-										draggable: true,
-										progress: undefined,
-										theme: 'colored',
-									});
-								}}
+							<NavLink
+								to={'/account'}
+								onClick={() => setIsMobileNavVisible(false)}
 								className="link">
 								{userAuth?.user?.photoURL ? (
 									<img
@@ -267,10 +175,9 @@ const Header = () => {
 												' '
 											)?.[0]
 										}
-									</span>{' '}
-									<span>- Log Out</span>
+									</span>
 								</div>
-							</span>
+							</NavLink>
 						)}
 					</div>
 					<div className="cart">
@@ -297,6 +204,56 @@ const Header = () => {
 							</div>
 							<span>Cart</span>
 						</NavLink>
+					</div>
+				</div>
+			</div>
+			{isSigninSideVisible && <div className="black-mask"></div>}
+			<div className={`signin-side-wrapper`}>
+				<div
+					className={`signin-side ${
+						isSigninSideVisible ? 'visible-side' : ''
+					}`}>
+					<div className="top">
+						<div className="left">
+							<RxCross1
+								onClick={() => setIsSigninSideVisible(false)}
+								className="icon"
+							/>
+							<div className="login-box">
+								<div className="login">
+									{isLoginScreen ? 'Login' : 'Sign up'}
+								</div>
+								<div className="create">
+									<span>or</span>
+									<span
+										onClick={() =>
+											setIsLoginScreen(prev => !prev)
+										}>
+										{isLoginScreen
+											? 'create an account'
+											: 'login to your account'}
+									</span>
+								</div>
+							</div>
+							<div className="style"></div>
+						</div>
+						<div className="right">
+							<img
+								src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r"
+								alt=""
+							/>
+						</div>
+					</div>
+					<div className="bottom">
+						{isLoginScreen ? (
+							<SignInBox
+								setIsSigninSideVisible={setIsSigninSideVisible}
+							/>
+						) : (
+							<SignUpBox
+								setIsSigninSideVisible={setIsSigninSideVisible}
+							/>
+						)}
 					</div>
 				</div>
 			</div>
