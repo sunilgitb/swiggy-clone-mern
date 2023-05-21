@@ -49,9 +49,7 @@ const CarouselCard = ({ carousels }) => {
 										? 'animation-right'
 										: ''
 								}>
-								<img
-									src={`${IMG_LINK}/${el?.data?.creativeId}`}
-								/>
+								<img src={IMG_LINK + el?.data?.creativeId} />
 							</div>
 						))}
 				</div>

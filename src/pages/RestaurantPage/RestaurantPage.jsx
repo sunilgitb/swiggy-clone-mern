@@ -22,9 +22,9 @@ const RestaurantPage = () => {
 	const [apiFailed, setApiFaildes] = useState('');
 	let idx = restaurantDetails?.findIndex(el => el.groupedCard !== undefined);
 	const navigate = useNavigate();
-	console.log(
-		restaurantDetails?.[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards
-	);
+	// console.log(
+	// 	restaurantDetails?.[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards
+	// );
 
 	const getRestaurantDetails = async () => {
 		try {

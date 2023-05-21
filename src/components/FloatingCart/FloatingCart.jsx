@@ -26,13 +26,12 @@ const FloatingCart = () => {
 							}, 0) / 100
 						).toLocaleString()}
 					</span>
-					<span className="right">
-						<span
-							onClick={() => {
-								navigate('/checkout');
-							}}>
-							VIEW CART
-						</span>{' '}
+					<span
+						className="right"
+						onClick={() => {
+							navigate('/checkout');
+						}}>
+						<span>VIEW CART</span>{' '}
 						<FiShoppingBag className="icon" />
 					</span>
 				</div>

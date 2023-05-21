@@ -19,7 +19,7 @@ const HotelCard = ({ hotel }) => {
 			<div className="hotel-card">
 				{hotel?.data?.cloudinaryImageId ? (
 					<img
-						src={`${IMG_LINK}/${hotel?.data?.cloudinaryImageId}`}
+						src={IMG_LINK + hotel?.data?.cloudinaryImageId}
 						alt={hotel?.data?.name}
 					/>
 				) : (

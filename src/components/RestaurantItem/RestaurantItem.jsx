@@ -60,7 +60,7 @@ const RestaurantItem = data => {
 				<div className="img">
 					{data?.card?.info?.imageId ? (
 						<img
-							src={`${IMG_LINK}/${data?.card?.info?.imageId}`}
+							src={IMG_LINK + data?.card?.info?.imageId}
 							alt={data?.card?.info?.name}
 						/>
 					) : (

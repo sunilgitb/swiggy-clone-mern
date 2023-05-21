@@ -157,6 +157,7 @@
 		}
 		.mobile-nav {
 			display: none;
+			z-index: 98;
 			.bars {
 				font-size: 3rem;
 			}
@@ -168,17 +169,15 @@
 			width: 80%;
 		}
 	}
-	@media screen and (max-width: 968px) {
-		.header .nav-links .search {
-			display: none;
-		}
-	}
 	@media screen and (max-width: 865px) {
 		.header {
 			width: 90%;
 		}
 	}
-	@media screen and (max-width: 590px) {
+	@media screen and (max-width: 768px) {
+		.header .nav-links .search {
+			display: none;
+		}
 		.header .nav-links #offers {
 			display: none;
 		}

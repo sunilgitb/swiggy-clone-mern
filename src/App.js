@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './redux/store';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -8,8 +8,28 @@ import Home from './pages/Home/Home';
 import RestaurantPage from './pages/RestaurantPage/RestaurantPage';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import Offers from './pages/Offers/Offers';
+import Search from './pages/Search/Search';
+import { useEffect } from 'react';
+import { updateCart } from './redux/slice/cartSlice';
 
 const AppLayout = () => {
+	const cart = useSelector(state => state.cart.items);
+	const dispatch = useDispatch();
+	const setCartToLocalStorage = () => {
+		window.localStorage.setItem('sw_cart_data', JSON.stringify(cart));
+	};
+	const getCartToLocalStorage = () => {
+		const cartData = window.localStorage.getItem('sw_cart_data')
+			? JSON.parse(window.localStorage.getItem('sw_cart_data'))
+			: [];
+		dispatch(updateCart(cartData));
+	};
+	useEffect(() => {
+		getCartToLocalStorage();
+	}, []);
+	useEffect(() => {
+		setCartToLocalStorage();
+	}, [cart]);
 	return (
 		<>
 			<Header />
@@ -42,6 +62,10 @@ const appRouter = createBrowserRouter([
 			{
 				path: '/checkout',
 				element: <CheckoutPage />,
+			},
+			{
+				path: '/search',
+				element: <Search />,
 			},
 			{
 				path: '/restaurants/:slug',

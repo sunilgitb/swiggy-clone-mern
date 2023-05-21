@@ -24,7 +24,6 @@ const Header = () => {
 	// NOTE: I am subscribing to store
 	const cartItems = useSelector(state => state.cart.items);
 	const [isSearchVisible, setIsSearchVisible] = useState(false);
-	const [searchText, setSearchText] = useState('');
 	const [showLogout, setShowLogout] = useState(true);
 	const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
 
@@ -74,20 +73,6 @@ const Header = () => {
 		setShowLogout(false);
 	});
 
-	useEffect(() => {
-		if (location.pathname === '/') {
-			setSearchText('');
-			setIsSearchVisible(false);
-		}
-	}, [location.pathname]);
-	useEffect(() => {
-		clearTimeout(timeout);
-		timeout = setTimeout(() => {
-			// search
-			dispatch(changeText(searchText));
-		}, 1000);
-	}, [searchText]);
-
 	return (
 		<>
 			<div className="header-wrapper">
@@ -107,26 +92,10 @@ const Header = () => {
 
 					<div className="nav-links">
 						<div className="search">
-							{isSearchVisible && location.pathname === '/' && (
-								<input
-									value={searchText}
-									onChange={e => {
-										setSearchText(e.target.value);
-									}}
-									type="text"
-									placeholder="Search restaurant"
-								/>
-							)}
-							{!isSearchVisible && location.pathname === '/' && (
-								<span
-									onClick={() => {
-										setIsSearchVisible(prev => !prev);
-									}}
-									className="link">
-									<SearchIcon className="icon" />
-									<span>Search</span>
-								</span>
-							)}
+							<NavLink to={'/search'} className="link">
+								<SearchIcon className="icon" />
+								<span>Search</span>
+							</NavLink>
 						</div>
 						<NavLink to="/offers" className="link" id="offers">
 							<OffersIcon className="icon" />
@@ -236,37 +205,13 @@ const Header = () => {
 				}`}>
 				<div className="nav-links">
 					<div className="search">
-						{isSearchVisible && location.pathname === '/' && (
-							<div className="input-wrapper">
-								<input
-									value={searchText}
-									onChange={e => {
-										setSearchText(e.target.value);
-									}}
-									type="text"
-									placeholder="Search restaurant"
-								/>
-								{searchText !== '' && (
-									<RxCross1
-										onClick={() => {
-											setSearchText('');
-											setIsSearchVisible(false);
-										}}
-										className="cross"
-									/>
-								)}
-							</div>
-						)}
-						{!isSearchVisible && location.pathname === '/' && (
-							<span
-								onClick={() => {
-									setIsSearchVisible(prev => !prev);
-								}}
-								className="link">
-								<SearchIcon className="icon" />
-								<span>Search</span>
-							</span>
-						)}
+						<NavLink
+							onClick={() => setIsMobileNavVisible(false)}
+							to={'/search'}
+							className="link">
+							<SearchIcon className="icon" />
+							<span>Search</span>
+						</NavLink>
 					</div>
 					<NavLink
 						to="/offers"

@@ -22,6 +22,7 @@ const CheckoutPage = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [isOrdered, setIsOrdered] = useState(false);
+	window.scrollTo(0, 0);
 	if (cart.length === 0) {
 		return (
 			<PaddingTop>
@@ -94,11 +95,7 @@ const CheckoutPage = () => {
 									{el?.info?.imageId ? (
 										<img
 											className="img"
-											src={
-												IMG_LINK +
-												'/' +
-												el?.info?.imageId
-											}
+											src={IMG_LINK + el?.info?.imageId}
 										/>
 									) : (
 										<div className="img">NO IMG</div>
