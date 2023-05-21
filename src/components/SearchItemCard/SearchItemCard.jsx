@@ -25,7 +25,11 @@ const SearchItemCard = ({
 				if (searchItem?.tagToDisplay === 'Restaurant') {
 					getRestInfo(searchItem?.metadata);
 				} else {
-					getSuggestedItems(searchItem?.metadata, 'DISH');
+					getSuggestedItems(
+						searchItem?.metadata,
+						'DISH',
+						searchItem?.text
+					);
 				}
 			}}>
 			<img

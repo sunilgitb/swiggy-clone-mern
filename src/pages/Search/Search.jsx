@@ -27,7 +27,7 @@ const Search = () => {
 	const [isLoadingRestaurant, setIsLoadingRestaurant] = useState(false);
 	const [dishItems, setDishItems] = useState([]);
 
-	const getSuggestedItems = async (metaData, type) => {
+	const getSuggestedItems = async (metaData, type, dishName) => {
 		setIsLoading(true);
 		if (type === 'DISH') {
 			setIsLoadingDish(true);
@@ -36,7 +36,9 @@ const Search = () => {
 		try {
 			if (type === 'DISH') {
 				setIsLoadingDish(true);
-				const { data } = await axios(SUGGESTION_ITEM_API + metaData);
+				const { data } = await axios(
+					`https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/search/v3?lat=25.5940947&lng=85.1375645&str=${dishName}&submitAction=SUGGESTION&metaData=${metaData}`
+				);
 				setDishItems(
 					data?.data?.cards?.[1]?.groupedCard?.cardGroupMap?.[type]
 						?.cards
