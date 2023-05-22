@@ -86,7 +86,7 @@ const SignInBox = () => {
 				<div className="err-text">
 					{errorIn === 'email'
 						? 'Please enter a valid email!'
-						: 'Password must be 8 character long!'}
+						: 'Password should atleast 8 character long!'}
 				</div>
 			)}
 			<input
