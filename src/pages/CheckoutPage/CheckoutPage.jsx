@@ -23,7 +23,7 @@ import { useState } from 'react';
 const CheckoutPage = () => {
 	const cart = useSelector(state => state.cart.items);
 	const userAuth = useSelector(state => state.auth.isAuth);
-	const userName = useSelector(state => state.auth.user.displayName);
+	const userData = useSelector(state => state.auth.user);
 	const emailVerified = useSelector(state => state.auth.user.emailVerified);
 	const [isOrdering, setIsOrdering] = useState(false);
 	const navigate = useNavigate();
@@ -65,7 +65,8 @@ const CheckoutPage = () => {
 		const templateID = 'template_0vsfg8d';
 		const templateParams = {
 			from_name: 'Swiggy Clone',
-			to_name: userName,
+			to_email:userData.email,
+			to_name: userData.displayName,
 			message: arr?.join(', \n'),
 		};
 		const publicKey = 'A1leIhFCWzIPCCJ3T';
