@@ -36,3 +36,6 @@ a {
 .err {
 	border: 1px solid red !important;
 }
+.swal2-show {
+	font-size: 14px !important;
+}

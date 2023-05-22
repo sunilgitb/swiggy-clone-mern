@@ -1,7 +1,5 @@
 import './Offers.scss';
 import PaddingTop from '../../utils/PaddingTop';
-import CarouselCard from '../../components/CarouselCard/CarouselCard';
-import HotelCard from '../../components/HotelCard/HotelCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ALL_RESTAURANTS_API_LINK } from '../../utils/config';

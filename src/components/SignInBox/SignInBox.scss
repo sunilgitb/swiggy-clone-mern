@@ -6,6 +6,12 @@
 	flex-direction: column;
 	gap: 2rem;
 
+	.err-text {
+		color: red;
+		font-size: 1.5rem;
+		height: 15px;
+	}
+
 	div {
 		height: 70px;
 		width: 100%;

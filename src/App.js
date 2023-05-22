@@ -11,7 +11,6 @@ import Offers from './pages/Offers/Offers';
 import Search from './pages/Search/Search';
 import { useEffect } from 'react';
 import { updateCart } from './redux/slice/cartSlice';
-import { ToastContainer } from 'react-toastify';
 import Profile from './pages/Profile/Profile';
 
 const AppLayout = () => {
@@ -40,20 +39,7 @@ const AppLayout = () => {
 			<div
 				style={{
 					fontSize: '1.5rem',
-				}}>
-				<ToastContainer
-					position="bottom-right"
-					autoClose={5000}
-					hideProgressBar={false}
-					newestOnTop={false}
-					closeOnClick
-					rtl={false}
-					pauseOnFocusLoss
-					draggable
-					pauseOnHover
-					theme="colored"
-				/>
-			</div>
+				}}></div>
 		</>
 	);
 };

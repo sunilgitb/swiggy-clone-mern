@@ -3,7 +3,8 @@ import './Profile.scss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { logout } from '../../redux/slice/authSlice';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 
 const Profile = () => {
 	const authData = useSelector(state => state.auth);
@@ -39,16 +40,19 @@ const Profile = () => {
 						<div className="email">{authData?.user?.email}</div>
 						<button
 							onClick={() => {
-								dispatch(logout());
-								toast.warn('Logout successfull!', {
-									position: 'bottom-right',
-									autoClose: 5000,
-									hideProgressBar: false,
-									closeOnClick: true,
-									pauseOnHover: true,
-									draggable: true,
-									progress: undefined,
-									theme: 'colored',
+								Swal.fire({
+									title: 'Are you sure?',
+									text: 'Dou you want to log out?',
+									icon: 'question',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: 'Yes, Logout!',
+								}).then(result => {
+									if (result.isConfirmed) {
+										dispatch(logout());
+										dispatch(updateSigninSideVisible(true));
+									}
 								});
 							}}>
 							Logout

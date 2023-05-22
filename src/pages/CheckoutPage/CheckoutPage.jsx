@@ -11,9 +11,8 @@ import {
 	increaseQuantity,
 	removeFromCart,
 } from '../../redux/slice/cartSlice';
-import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
+import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 
 let timer;
 const CheckoutPage = () => {
@@ -21,7 +20,7 @@ const CheckoutPage = () => {
 	const userAuth = useSelector(state => state.auth.isAuth);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const [isOrdered, setIsOrdered] = useState(false);
+	// const [isOrdered, setIsOrdered] = useState(false);
 	window.scrollTo(0, 0);
 	if (cart.length === 0) {
 		return (
@@ -51,7 +50,7 @@ const CheckoutPage = () => {
 
 	return (
 		<PaddingTop>
-			{isOrdered && (
+			{/* {isOrdered && (
 				<div
 					onClick={() => {
 						setIsOrdered(false);
@@ -72,7 +71,7 @@ const CheckoutPage = () => {
 						<div>Order Successful!</div>
 					</div>
 				</div>
-			)}
+			)} */}
 			<div className="checkout-wrapper">
 				<div className="checkout">
 					<div className="nav">
@@ -86,7 +85,19 @@ const CheckoutPage = () => {
 						<button
 							className="clr"
 							onClick={() => {
-								dispatch(clearCart());
+								Swal.fire({
+									title: 'Are you sure?',
+									text: 'Dou you want to clear cart?',
+									icon: 'question',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: 'Yes, Clear!',
+								}).then(result => {
+									if (result.isConfirmed) {
+										dispatch(clearCart());
+									}
+								});
 							}}>
 							Clear Cart
 						</button>
@@ -179,56 +190,35 @@ const CheckoutPage = () => {
 					<div
 						onClick={() => {
 							if (!userAuth) {
-								return toast.error('Please login first!', {
-									position: 'bottom-right',
-									autoClose: 5000,
-									hideProgressBar: false,
-									closeOnClick: true,
-									pauseOnHover: true,
-									draggable: true,
-									progress: undefined,
-									theme: 'colored',
+								return Swal.fire({
+									title: 'Please login first!',
+									text: 'After login you can order!',
+									icon: 'warning',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: 'Yes, Login!',
+								}).then(result => {
+									if (result.isConfirmed) {
+										dispatch(updateSigninSideVisible(true));
+									}
 								});
 							}
-							setIsOrdered(true);
-							clearTimeout(timer);
-							toast.success('Order Successful!', {
-								position: 'bottom-right',
-								autoClose: 4000,
-								hideProgressBar: false,
-								closeOnClick: true,
-								pauseOnHover: true,
-								draggable: true,
-								progress: undefined,
-								theme: 'colored',
+							Swal.fire({
+								title: 'Order Successful!',
+								text: 'Your order has been placed successfully!',
+								icon: 'success',
+							}).then(result => {
+								if (result.isConfirmed) {
+									dispatch(clearCart());
+									navigate('/');
+								}
 							});
-							timer = setTimeout(() => {
-								setIsOrdered(false);
-								dispatch(clearCart());
-								navigate('/');
-							}, 5000);
 						}}
 						className="order-box">
 						<button>Order</button>
 					</div>
 				</div>
-			</div>
-			<div
-				style={{
-					fontSize: '1.5rem',
-				}}>
-				<ToastContainer
-					position="bottom-right"
-					autoClose={5000}
-					hideProgressBar={false}
-					newestOnTop={false}
-					closeOnClick
-					rtl={false}
-					pauseOnFocusLoss
-					draggable
-					pauseOnHover
-					theme="colored"
-				/>
 			</div>
 		</PaddingTop>
 	);

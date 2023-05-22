@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
 import staticRestaurant from './../../utils/restaurantList';
 import Main from '../../components/Main/Main';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import FloatingCart from '../../components/FloatingCart/FloatingCart';
 
 const Home = () => {

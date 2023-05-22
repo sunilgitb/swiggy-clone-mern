@@ -6,9 +6,10 @@ import { auth } from '../../auth/firebase';
 import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/slice/authSlice';
-import { toast } from 'react-toastify';
+import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
+import Swal from 'sweetalert2';
 
-const SignUpBox = ({ setIsSigninSideVisible }) => {
+const SignUpBox = ({}) => {
 	const initialState = {
 		name: '',
 		email: '',
@@ -28,7 +29,7 @@ const SignUpBox = ({ setIsSigninSideVisible }) => {
 	};
 	const dispatch = useDispatch();
 	const signupHandler = () => {
-		if (state.name.trim() === '') {
+		if (state.name.trim().length < 5) {
 			return setErrorIn('name');
 		}
 		if (!validator.isEmail(state.email.trim())) {
@@ -45,64 +46,58 @@ const SignUpBox = ({ setIsSigninSideVisible }) => {
 				// ...
 				updateProfile(auth.currentUser, {
 					displayName: state.name,
-					// photoURL: 'https://example.com/jane-q-user/profile.jpg',
 				})
 					.then(() => {
-						// Profile updated!
-						// ...
-						console.log(user);
-						dispatch(
-							login({
-								displayName: user.displayName,
-								email: user.email,
-							})
-						);
-						setIsSigninSideVisible(false);
+						dispatch(updateSigninSideVisible(false));
 						setState(initialState);
-						toast.success('Signup successfull!', {
-							position: 'bottom-right',
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-							theme: 'colored',
+						Swal.fire({
+							title: 'Success!',
+							text: 'Account created successfully. Dou you want to login?',
+							icon: 'success',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Yes, Login!',
+						}).then(result => {
+							if (result.isConfirmed) {
+								dispatch(
+									login({
+										displayName: user.displayName,
+										email: user.email,
+									})
+								);
+							}
 						});
 						setIsLoggingIn(false);
 					})
 					.catch(error => {
-						// An error occurred
-						// ...
-						console.log(error);
+						Swal.fire('Failed!', error.message, 'error');
+						setIsLoggingIn(false);
 					});
 			})
 			.catch(error => {
-				const errorMessage = error.message;
-				toast.error(errorMessage, {
-					position: 'bottom-right',
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: 'colored',
-				});
-				setIsSigninSideVisible(false);
+				Swal.fire('Failed!', error.message, 'error');
 				setIsLoggingIn(false);
-				// ..
 			});
 	};
 
 	return (
 		<div className="signup-box">
+			{errorIn && (
+				<div className="err-text">
+					{errorIn === 'email'
+						? 'Please enter a valid email!'
+						: errorIn === 'name'
+						? 'Full Name should atleast 5 character long!'
+						: 'Password should atleast 8 character long!'}
+				</div>
+			)}
 			<input
 				type="text"
 				value={state.name}
 				onChange={changeHandler}
 				name="name"
-				placeholder="Name"
+				placeholder="Full Name"
 				className={`${errorIn === 'name' ? 'err' : ''}`}
 			/>
 			<input

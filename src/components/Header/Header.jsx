@@ -1,33 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Header.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { ReactComponent as CartIcon } from './../../assets/icons/cart.svg';
 import { ReactComponent as LogoIcon } from './../../assets/icons/logo.svg';
 import { ReactComponent as SearchIcon } from './../../assets/icons/search.svg';
 import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { ReactComponent as SigninIcon } from './../../assets/icons/signin.svg';
 import { VscChevronDown } from 'react-icons/vsc';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { GoThreeBars } from 'react-icons/go';
 import { RxCross1 } from 'react-icons/rx';
-
-// auth
-import { auth } from '../../auth/firebase';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { login, logout } from '../../redux/slice/authSlice';
 import SignInBox from '../SignInBox/SignInBox';
 import SignUpBox from '../SignUpBox/SignUpBox';
+import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 
-let timeout;
 const Header = () => {
 	// NOTE: I am subscribing to store
 	const cartItems = useSelector(state => state.cart.items);
+	const isSigninSideVisible = useSelector(
+		state => state.loginBools.isSigninSideVisible
+	);
+	const dispatch = useDispatch();
 	const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
-	const [isSigninSideVisible, setIsSigninSideVisible] = useState(false);
 	const [isLoginScreen, setIsLoginScreen] = useState(true);
-
 	const userAuth = useSelector(state => state.auth);
 
 	return (
@@ -62,7 +57,7 @@ const Header = () => {
 							{!userAuth.isAuth ? (
 								<span
 									onClick={() => {
-										setIsSigninSideVisible(true);
+										dispatch(updateSigninSideVisible(true));
 									}}
 									className="link">
 									<SigninIcon className="icon" />
@@ -148,7 +143,7 @@ const Header = () => {
 						{!userAuth.isAuth ? (
 							<span
 								onClick={() => {
-									setIsSigninSideVisible(true);
+									dispatch(updateSigninSideVisible(true));
 									setIsMobileNavVisible(false);
 								}}
 								className="link">
@@ -216,7 +211,9 @@ const Header = () => {
 					<div className="top">
 						<div className="left">
 							<RxCross1
-								onClick={() => setIsSigninSideVisible(false)}
+								onClick={() =>
+									dispatch(updateSigninSideVisible(false))
+								}
 								className="icon"
 							/>
 							<div className="login-box">
@@ -245,15 +242,7 @@ const Header = () => {
 						</div>
 					</div>
 					<div className="bottom">
-						{isLoginScreen ? (
-							<SignInBox
-								setIsSigninSideVisible={setIsSigninSideVisible}
-							/>
-						) : (
-							<SignUpBox
-								setIsSigninSideVisible={setIsSigninSideVisible}
-							/>
-						)}
+						{isLoginScreen ? <SignInBox /> : <SignUpBox />}
 					</div>
 				</div>
 			</div>
