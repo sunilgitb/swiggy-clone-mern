@@ -12,6 +12,9 @@ import Search from './pages/Search/Search';
 import { useEffect } from 'react';
 import { updateCart } from './redux/slice/cartSlice';
 import Profile from './pages/Profile/Profile';
+import { auth } from './auth/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { login } from './redux/slice/authSlice';
 
 const AppLayout = () => {
 	const cart = useSelector(state => state.cart.items);
@@ -27,10 +30,24 @@ const AppLayout = () => {
 	};
 	useEffect(() => {
 		getCartToLocalStorage();
+		onAuthStateChanged(auth, user => {
+			if (user) {
+				dispatch(
+					login({
+						displayName: user.displayName,
+						email: user.email,
+						photoURL: user.photoURL,
+						emailVerified: user.emailVerified,
+						providerId: user?.providerId,
+					})
+				);
+			}
+		});
 	}, []);
 	useEffect(() => {
 		setCartToLocalStorage();
 	}, [cart]);
+
 	return (
 		<>
 			<Header />

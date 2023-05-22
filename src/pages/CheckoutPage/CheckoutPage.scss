@@ -126,6 +126,8 @@
 			justify-content: flex-end;
 
 			button {
+				height: 50px;
+				width: 100px;
 				cursor: pointer;
 				border: none;
 				text-transform: uppercase;
@@ -138,6 +140,14 @@
 
 				&:hover {
 					box-shadow: 0 2px 5px #a1a1a1c9;
+				}
+				&:disabled {
+					background: #9494949f;
+					cursor: not-allowed;
+				}
+				.loading-icon {
+					height: 100%;
+					width: 100%;
 				}
 			}
 		}

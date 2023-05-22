@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../redux/slice/authSlice';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 import Swal from 'sweetalert2';
+import { ReactComponent as LoadingIcon } from './../../assets/loading.svg';
 
 const SignUpBox = ({}) => {
 	const initialState = {
@@ -40,9 +41,9 @@ const SignUpBox = ({}) => {
 		}
 		setIsLoggingIn(true);
 		createUserWithEmailAndPassword(auth, state.email, state.password)
-			.then(userCredential => {
+			.then(result => {
 				// Signed in
-				const user = userCredential.user;
+				const user = result.user;
 				// ...
 				updateProfile(auth.currentUser, {
 					displayName: state.name,
@@ -62,8 +63,10 @@ const SignUpBox = ({}) => {
 							if (result.isConfirmed) {
 								dispatch(
 									login({
-										displayName: user.displayName,
-										email: user.email,
+										displayName: user?.displayName,
+										email: user?.email,
+										emailVerified: user?.emailVerified,
+										providerId: result?.providerId,
 									})
 								);
 							}
@@ -130,7 +133,11 @@ const SignUpBox = ({}) => {
 				)}
 			</div>
 			<button disabled={isLoggingIn} onClick={signupHandler}>
-				Signup
+				{isLoggingIn ? (
+					<LoadingIcon className="loading-icon" />
+				) : (
+					'Signup'
+				)}
 			</button>
 		</div>
 	);

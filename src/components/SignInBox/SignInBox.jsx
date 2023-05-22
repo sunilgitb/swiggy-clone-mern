@@ -3,15 +3,20 @@ import './SignInBox.scss';
 import { auth } from '../../auth/firebase';
 import {
 	GoogleAuthProvider,
+	GithubAuthProvider,
 	signInWithEmailAndPassword,
 	signInWithPopup,
+	onAuthStateChanged,
 } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { GoMarkGithub } from 'react-icons/go';
+import { BsGoogle } from 'react-icons/bs';
 import { login } from '../../redux/slice/authSlice';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 import Swal from 'sweetalert2';
 import validator from 'validator';
+import { ReactComponent as LoadingIcon } from './../../assets/loading.svg';
 
 const SignInBox = () => {
 	const dispatch = useDispatch();
@@ -20,7 +25,7 @@ const SignInBox = () => {
 		password: '',
 	});
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-	const [isLoggingIn, setIsLoggingIn] = useState(false);
+	const [isLoggingIn, setIsLoggingIn] = useState('');
 	const [errorIn, setErrorIn] = useState('');
 
 	const changeHandler = e => {
@@ -38,30 +43,30 @@ const SignInBox = () => {
 		if (state.password.trim().length < 8) {
 			return setErrorIn('password');
 		}
-		setIsLoggingIn(true);
+		setIsLoggingIn('emailpass');
 		signInWithEmailAndPassword(auth, state.email, state.password)
-			.then(userCredential => {
-				// Signed in
-				const user = userCredential.user;
-
+			.then(result => {
+				const user = result.user;
 				dispatch(
 					login({
 						displayName: user.displayName,
 						email: user.email,
 						photoURL: user.photoURL,
+						emailVerified: user.emailVerified,
+						providerId: result?.providerId,
 					})
 				);
-				setIsLoggingIn(false);
+				setIsLoggingIn('');
 				dispatch(updateSigninSideVisible(false));
 				Swal.fire('Success!', `You're log in successfully!`, 'success');
 			})
 			.catch(error => {
 				Swal.fire('Failed!', error.message, 'error');
-				setIsLoggingIn(false);
+				setIsLoggingIn('');
 			});
 	};
 	const loginFunGoogle = async () => {
-		setIsLoggingIn(true);
+		setIsLoggingIn('google');
 		const provider = new GoogleAuthProvider();
 		try {
 			const result = await signInWithPopup(auth, provider);
@@ -70,14 +75,38 @@ const SignInBox = () => {
 					displayName: result?.user?.displayName,
 					email: result?.user?.email,
 					photoURL: result?.user?.photoURL,
+					emailVerified: result?.user?.emailVerified,
+					providerId: result?.providerId,
 				})
 			);
 			Swal.fire('Success!', `You're log in successfully!`, 'success');
 			dispatch(updateSigninSideVisible(false));
-		} catch (err) {
-			Swal.fire('Failed!', err.message, 'error');
+		} catch (error) {
+			Swal.fire('Failed!', error.message, 'error');
 		}
-		setIsLoggingIn(false);
+		setIsLoggingIn('');
+	};
+
+	const loginFunGitHub = async () => {
+		setIsLoggingIn('github');
+		const provider = new GithubAuthProvider();
+		try {
+			const result = await signInWithPopup(auth, provider);
+			dispatch(
+				login({
+					displayName: result?.user?.displayName,
+					email: result?.user?.providerData?.[0]?.email,
+					photoURL: result?.user?.photoURL,
+					emailVerified: result?.user?.emailVerified,
+					providerId: result?.providerId,
+				})
+			);
+			Swal.fire('Success!', `You're log in successfully!`, 'success');
+			dispatch(updateSigninSideVisible(false));
+		} catch (error) {
+			Swal.fire('Failed!', error.message, 'error');
+		}
+		setIsLoggingIn('');
 	};
 
 	return (
@@ -120,10 +149,35 @@ const SignInBox = () => {
 				)}
 			</div>
 			<button disabled={isLoggingIn} onClick={loginHandler}>
-				LOGIN
+				{isLoggingIn === 'emailpass' ? (
+					<LoadingIcon className="loading-icon" />
+				) : (
+					'LOGIN'
+				)}
 			</button>
-			<button disabled={isLoggingIn} onClick={loginFunGoogle}>
-				Continue with Google
+			<button
+				className="github"
+				disabled={isLoggingIn}
+				onClick={loginFunGoogle}>
+				{isLoggingIn === 'google' ? (
+					<LoadingIcon className="loading-icon" />
+				) : (
+					<>
+						Continue with <BsGoogle className="icon" />
+					</>
+				)}
+			</button>
+			<button
+				className="google"
+				disabled={isLoggingIn}
+				onClick={loginFunGitHub}>
+				{isLoggingIn === 'github' ? (
+					<LoadingIcon className="loading-icon" />
+				) : (
+					<>
+						Continue with <GoMarkGithub className="icon" />
+					</>
+				)}
 			</button>
 		</div>
 	);

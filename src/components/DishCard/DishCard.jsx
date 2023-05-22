@@ -55,8 +55,7 @@ const DishCard = ({ dishItem }) => {
 					<div className="left">
 						<div className="info">
 							<span className="tag">
-								{info?.itemAttribute?.vegClassifier ===
-								'VEG' ? (
+								{info?.isVeg ? (
 									<VegIcon className="veg-nonveg-icon" />
 								) : (
 									<NonVegIcon className="veg-nonveg-icon" />

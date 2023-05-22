@@ -55,6 +55,18 @@
 		font-weight: 600;
 		cursor: pointer;
 		box-shadow: 0 2px 5px #0000001f;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+
+		.icon {
+			font-size: 2rem;
+			color: #fff;
+		}
+		.loading-icon {
+			height: 100%;
+		}
 
 		&:hover {
 			box-shadow: 0 5px 10px #4e4e4e33;
@@ -63,6 +75,12 @@
 			background: #9494949f;
 			cursor: not-allowed;
 		}
+	}
+	.google {
+		background: #0d1117;
+	}
+	.github {
+		background: #4285f4;
 	}
 }
 @media screen and (max-width: 375px) {

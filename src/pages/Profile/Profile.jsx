@@ -5,11 +5,36 @@ import { useEffect } from 'react';
 import { logout } from '../../redux/slice/authSlice';
 import Swal from 'sweetalert2';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
+import { sendEmailVerification, signOut } from 'firebase/auth';
+import { auth } from '../../auth/firebase';
 
 const Profile = () => {
 	const authData = useSelector(state => state.auth);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	const verifyAccount = async () => {
+		try {
+			await sendEmailVerification(auth.currentUser);
+			Swal.fire('Check email!', `Verification send to email!`, 'success');
+		} catch (error) {
+			Swal.fire('Failed!', error.message, 'error');
+		}
+	};
+
+	const logoutFunc = () => {
+		signOut(auth)
+			.then(() => {
+				// Sign-out successful.
+				dispatch(logout());
+				dispatch(updateSigninSideVisible(true));
+			})
+			.catch(error => {
+				// An error happened.
+				Swal.fire('Failed!', error.message, 'error');
+			});
+	};
+
 	useEffect(() => {
 		if (!authData.isAuth) {
 			navigate('/');
@@ -29,7 +54,7 @@ const Profile = () => {
 							<div className="dummy-img">
 								{authData?.user?.displayName
 									?.split(' ')
-									?.map(el => el?.[0])}
+									?.map(el => el?.[0]?.toUpperCase())}
 							</div>
 						</div>
 					)}
@@ -37,8 +62,27 @@ const Profile = () => {
 						<div className="name">
 							{authData?.user?.displayName}
 						</div>
-						<div className="email">{authData?.user?.email}</div>
+						<div className="email">
+							{authData?.user?.email}{' '}
+							{!authData?.user?.emailVerified ? (
+								<button
+									onClick={verifyAccount}
+									className="verify-btn">
+									Not Verify
+								</button>
+							) : (
+								<button className="verifed-btn">
+									Verified
+								</button>
+							)}
+						</div>
+						{/* {!authData?.user?.providerId && (
+							<div className="change-password">
+								Change password?
+							</div>
+						)} */}
 						<button
+							className="logout-btn"
 							onClick={() => {
 								Swal.fire({
 									title: 'Are you sure?',
@@ -50,8 +94,7 @@ const Profile = () => {
 									confirmButtonText: 'Yes, Logout!',
 								}).then(result => {
 									if (result.isConfirmed) {
-										dispatch(logout());
-										dispatch(updateSigninSideVisible(true));
+										logoutFunc();
 									}
 								});
 							}}>

@@ -8,7 +8,7 @@
 	justify-content: center;
 
 	.profile {
-		height: 300px;
+		// height: 300px;
 		width: 50%;
 		box-shadow: 0 0 20px #00000056;
 		background: #fff;
@@ -73,19 +73,46 @@
 					font-size: 2rem;
 				}
 				button {
-					margin: 1rem 0 0 0;
 					cursor: pointer;
 					border: none;
 					text-transform: uppercase;
+					border-radius: 3px;
+					background: transparent;
+				}
+				.verify-btn {
+					padding: 5px 10px;
+					text-transform: capitalize;
+					background: #be3838;
 					color: #fff;
+					&:hover {
+						box-shadow: 0 2px 5px #a1a1a1c9;
+						background: var(--color-red);
+						color: #fff;
+					}
+				}
+				.verifed-btn {
+					padding: 5px 10px;
+					text-transform: capitalize;
+					background: #18990c;
+					color: #fff;
+					cursor: text;
+				}
+				.change-password {
+					font-size: 1.5rem;
+					color: rgb(101, 101, 252);
+					cursor: pointer;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+				.logout-btn {
+					margin: 1rem 0 0 0;
 					font-weight: 600;
 					font-size: 1.3rem;
 					padding: 10px 20px;
-					border-radius: 3px;
 					border: 1px solid var(--color-red);
-					background: transparent;
 					color: var(--color-black-link);
-
 					&:hover {
 						box-shadow: 0 2px 5px #a1a1a1c9;
 						background: var(--color-red);

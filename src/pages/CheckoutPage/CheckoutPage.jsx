@@ -11,16 +11,88 @@ import {
 	increaseQuantity,
 	removeFromCart,
 } from '../../redux/slice/cartSlice';
+
+import { ReactComponent as LoadingIcon } from './../../assets/loading.svg';
 import Swal from 'sweetalert2';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
+import { sendEmailVerification } from 'firebase/auth';
+import { auth } from '../../auth/firebase';
+import emailjs from '@emailjs/browser';
+import { useState } from 'react';
 
-let timer;
 const CheckoutPage = () => {
 	const cart = useSelector(state => state.cart.items);
 	const userAuth = useSelector(state => state.auth.isAuth);
+	const userName = useSelector(state => state.auth.user.displayName);
+	const emailVerified = useSelector(state => state.auth.user.emailVerified);
+	const [isOrdering, setIsOrdering] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	// const [isOrdered, setIsOrdered] = useState(false);
+
+	const verifyAccount = async () => {
+		try {
+			await sendEmailVerification(auth.currentUser);
+			Swal.fire('Check email!', `Verification send to email!`, 'success');
+		} catch (error) {
+			Swal.fire('Failed!', error.message, 'error');
+		}
+	};
+	const sendEmailHandler = async () => {
+		setIsOrdering(true);
+		const arr = cart?.map(
+			el =>
+				`${el?.info?.name} - ${el?.quantity}pc - ₹${
+					(el?.info?.price ||
+						el?.info?.defaultPrice ||
+						el?.info?.variantsV2?.pricingModels?.[0]?.price *
+							el?.quantity) / 100
+				}`
+		);
+		arr.push(
+			`Total Amount - ₹${(
+				cart?.reduce((acc, el) => {
+					return el?.info?.price
+						? acc + el?.info?.price * el?.quantity
+						: el?.info?.defaultPrice
+						? acc + el?.info?.defaultPrice * el?.quantity
+						: acc +
+						  el?.info?.variantsV2?.pricingModels?.[0]?.price *
+								el?.quantity;
+				}, 0) / 100
+			).toLocaleString()}`
+		);
+		const serviceID = 'service_o23awnc';
+		const templateID = 'template_0vsfg8d';
+		const templateParams = {
+			from_name: 'Swiggy Clone',
+			to_name: userName,
+			message: arr?.join(', \n'),
+		};
+		const publicKey = 'A1leIhFCWzIPCCJ3T';
+		try {
+			await emailjs.send(
+				serviceID,
+				templateID,
+				templateParams,
+				publicKey
+			);
+
+			setIsOrdering(false);
+
+			Swal.fire({
+				title: 'Order Successful!',
+				text: 'Check your email for order details!',
+				icon: 'success',
+			}).then(result => {
+				if (result.isConfirmed) {
+					dispatch(clearCart());
+					navigate('/');
+				}
+			});
+		} catch (error) {
+			Swal.fire('Failed!', error.message, 'error');
+		}
+	};
 	window.scrollTo(0, 0);
 	if (cart.length === 0) {
 		return (
@@ -50,28 +122,6 @@ const CheckoutPage = () => {
 
 	return (
 		<PaddingTop>
-			{/* {isOrdered && (
-				<div
-					onClick={() => {
-						setIsOrdered(false);
-						dispatch(clearCart());
-						navigate('/');
-					}}
-					className="success-modal">
-					<div onClick={e => e.stopPropagation()} className="modal">
-						<div className="top">Order List - </div>
-						<ol
-							style={{
-								padding: '10px',
-							}}>
-							{cart.map(el => (
-								<li key={uuidv4()}>{el?.info?.name}</li>
-							))}
-						</ol>
-						<div>Order Successful!</div>
-					</div>
-				</div>
-			)} */}
 			<div className="checkout-wrapper">
 				<div className="checkout">
 					<div className="nav">
@@ -86,7 +136,7 @@ const CheckoutPage = () => {
 							className="clr"
 							onClick={() => {
 								Swal.fire({
-									title: 'Are you sure?',
+									title: 'Clear cart?',
 									text: 'Dou you want to clear cart?',
 									icon: 'question',
 									showCancelButton: true,
@@ -204,19 +254,32 @@ const CheckoutPage = () => {
 									}
 								});
 							}
-							Swal.fire({
-								title: 'Order Successful!',
-								text: 'Your order has been placed successfully!',
-								icon: 'success',
-							}).then(result => {
-								if (result.isConfirmed) {
-									dispatch(clearCart());
-									navigate('/');
-								}
-							});
+							if (!emailVerified) {
+								return Swal.fire({
+									title: 'Please verify email!',
+									text: 'We will send order details to email!',
+									icon: 'warning',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: 'Verify!',
+								}).then(result => {
+									if (result.isConfirmed) {
+										verifyAccount();
+									}
+								});
+							}
+
+							sendEmailHandler();
 						}}
 						className="order-box">
-						<button>Order</button>
+						<button disabled={isOrdering}>
+							{isOrdering ? (
+								<LoadingIcon className="loading-icon" />
+							) : (
+								'Order'
+							)}
+						</button>
 					</div>
 				</div>
 			</div>
