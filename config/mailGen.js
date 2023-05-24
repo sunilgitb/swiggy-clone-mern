@@ -29,12 +29,11 @@ const orderCompleteMail = (userData, orderList) => {
 				},
 			},
 			action: {
-				instructions:
-					'You can check the status of your order and more in your dashboard:',
+				instructions: 'You can order more on our app:',
 				button: {
 					color: '#3869D4',
-					text: 'Go to Dashboard',
-					link: 'https://swiggy-clone-vivek.vercel.app/profile',
+					text: 'Go to Homepage',
+					link: 'https://swiggy-vivek.vercel.app/',
 				},
 			},
 			outro: 'We thank you for your purchase.',
