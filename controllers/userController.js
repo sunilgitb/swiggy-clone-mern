@@ -2,11 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const transporter = require('./../config/emailConfig');
-const {
-	resetPasswordMail,
-	verifyAccountMail,
-	orderCompleteMail,
-} = require('./../config/mailGen');
+const { resetPasswordMail, verifyAccountMail } = require('./../config/mailGen');
 
 const getUser = async (req, res) => {
 	const { id } = req.body;
@@ -312,12 +308,10 @@ const verifyUserAccount = async (req, res) => {
 	}
 };
 
-const logoutUser = (req, res) => {};
 module.exports = {
 	getUser,
 	registerUser,
 	loginUser,
-	logoutUser,
 	changePassword,
 	sendUserPasswordResetEmail,
 	userPasswordReset,

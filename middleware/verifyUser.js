@@ -9,20 +9,21 @@ const verifyUser = async (req, res, next) => {
 			message: 'Authorization failed, Please login!',
 		});
 	}
-	try {
-		const userData = jwt.verify(
-			accessToken,
-			process.env.ACCESS_TOKEN_SECRET
-		);
 
-		req.body.id = userData.id;
-		next();
-	} catch (error) {
-		res.status(401).json({
-			status: 'fail',
-			message: 'Invalid token!',
-		});
-	}
+	jwt.verify(
+		accessToken,
+		process.env.ACCESS_TOKEN_SECRET,
+		(err, userData) => {
+			if (err) {
+				return res.status(403).json({
+					status: 'fail',
+					message: 'Invalid token!',
+				});
+			}
+			req.body.id = userData.id;
+			next();
+		}
+	);
 };
 
 module.exports = verifyUser;
