@@ -65,7 +65,7 @@ const CheckoutPage = () => {
 		const templateID = 'template_0vsfg8d';
 		const templateParams = {
 			from_name: 'Swiggy Clone',
-			to_email:userData.email,
+			to_email: userData.email,
 			to_name: userData.displayName,
 			message: arr?.join(', \n'),
 		};
@@ -103,6 +103,7 @@ const CheckoutPage = () => {
 						<img
 							className="img"
 							src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/2xempty_cart_yfxml0"
+							alt=""
 						/>
 						<h1>Your cart is empty</h1>
 						<p>You can go to home page to view more restaurants</p>
@@ -161,6 +162,7 @@ const CheckoutPage = () => {
 										<img
 											className="img"
 											src={IMG_LINK + el?.info?.imageId}
+											alt=""
 										/>
 									) : (
 										<div className="img">NO IMG</div>

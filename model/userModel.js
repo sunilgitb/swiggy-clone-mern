@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'A user must have password'],
 	},
+	photoURL: {
+		type: String,
+		default: '',
+	},
 	orderList: {
 		type: Array,
 		default: [],
