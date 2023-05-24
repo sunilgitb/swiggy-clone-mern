@@ -17,8 +17,8 @@ import Swal from 'sweetalert2';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 import { sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../auth/firebase';
-import emailjs from '@emailjs/browser';
 import { useState } from 'react';
+import axios from 'axios';
 
 const CheckoutPage = () => {
 	const cart = useSelector(state => state.cart.items);
@@ -28,7 +28,6 @@ const CheckoutPage = () => {
 	const [isOrdering, setIsOrdering] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
 	const verifyAccount = async () => {
 		try {
 			await sendEmailVerification(auth.currentUser);
@@ -39,45 +38,40 @@ const CheckoutPage = () => {
 	};
 	const sendEmailHandler = async () => {
 		setIsOrdering(true);
-		const arr = cart?.map(
-			el =>
-				`${el?.info?.name} - ${el?.quantity}pc - ₹${
-					(el?.info?.price ||
-						el?.info?.defaultPrice ||
-						el?.info?.variantsV2?.pricingModels?.[0]?.price *
-							el?.quantity) / 100
-				}`
-		);
-		arr.push(
-			`Total Amount - ₹${(
-				cart?.reduce((acc, el) => {
-					return el?.info?.price
-						? acc + el?.info?.price * el?.quantity
-						: el?.info?.defaultPrice
-						? acc + el?.info?.defaultPrice * el?.quantity
-						: acc +
-						  el?.info?.variantsV2?.pricingModels?.[0]?.price *
-								el?.quantity;
-				}, 0) / 100
-			).toLocaleString()}`
-		);
-		const serviceID = 'service_o23awnc';
-		const templateID = 'template_0vsfg8d';
-		const templateParams = {
-			from_name: 'Swiggy Clone',
-			to_email: userData.email,
-			to_name: userData.displayName,
-			message: arr?.join(', \n'),
-		};
-		const publicKey = 'A1leIhFCWzIPCCJ3T';
 		try {
-			await emailjs.send(
-				serviceID,
-				templateID,
-				templateParams,
-				publicKey
-			);
+			const arr = cart?.map(el => {
+				return {
+					name: el?.info?.name,
+					quantity: el?.quantity,
+					price:
+						(el?.info?.price ||
+							el?.info?.defaultPrice ||
+							el?.info?.variantsV2?.pricingModels?.[0]?.price) /
+						100,
+				};
+			});
+			arr.push({
+				name: 'Total',
+				quantity: arr.reduce((acc, cur) => {
+					return (acc += cur?.quantity);
+				}, 0),
+				price: arr.reduce((acc, cur) => {
+					return (acc += cur?.quantity * cur?.price);
+				}, 0),
+			});
 
+			await axios.post(
+				'https://swiggy-clone-wjqx.onrender.com/api/v1/order',
+				{
+					userData,
+					orderList: arr.map(el => {
+						return {
+							...el,
+							price: `₹${el.price.toLocaleString()}`,
+						};
+					}),
+				}
+			);
 			setIsOrdering(false);
 
 			Swal.fire({
@@ -91,6 +85,7 @@ const CheckoutPage = () => {
 				}
 			});
 		} catch (error) {
+			setIsOrdering(false);
 			Swal.fire('Failed!', error.message, 'error');
 		}
 	};

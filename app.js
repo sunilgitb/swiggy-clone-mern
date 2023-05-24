@@ -6,19 +6,25 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(
+	cors({
+		origin: '*',
+		// origin: process.env.FRONTEND_HOMEPAGE,
+		credentials: true,
+		methods: 'POST',
+	})
+);
 env.config();
 
-const userRoutes = require('./routes/userRoutes');
-const orderRoutes = require('./routes/orderRoutes');
+const { orderController } = require('./controllers/orderController');
 
 const DB_URI = process.env.DB_URI;
+
 mongoose.connect(DB_URI).then(conn => {
 	console.log(`DB connection successfull! : ${conn.connection.host}`);
 });
 
-app.use('/api/v1/user', userRoutes);
-app.use('/api/v1/order', orderRoutes);
+app.post('/api/v1/order', orderController);
 
 app.all('*', (req, res) => {
 	res.status(400).json({
