@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt');
 const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const transporter = require('./../config/emailConfig');
-const { resetPasswordMail, verifyAccountMail } = require('./../config/mailGen');
+const {
+	resetPasswordMail,
+	verifyAccountMail,
+	orderCompleteMail,
+} = require('./../config/mailGen');
 
 const getUser = async (req, res) => {
 	const { id } = req.body;
@@ -182,7 +186,7 @@ const sendUserPasswordResetEmail = async (req, res) => {
 		await transporter.sendMail({
 			from: process.env.EMAIL_FROM,
 			to: user.email,
-			subject: 'Swiggy Clone: reset your password',
+			subject: 'Swiggy Clone: Reset your password',
 			html: emailBody,
 		});
 
@@ -260,7 +264,7 @@ const sendVerifyUserAccountEmail = async (req, res) => {
 		await transporter.sendMail({
 			from: process.env.EMAIL_FROM,
 			to: user.email,
-			subject: 'Swiggy Clone: verify your account',
+			subject: 'Swiggy Clone: Verify your account',
 			html: emailBody,
 		});
 
