@@ -1,22 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-var cors = require('cors');
+const cors = require('cors');
 const env = require('dotenv');
+const corsOptions = require('./config/corsOptions');
+const { orderController } = require('./controllers/orderController');
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(
-	cors({
-		origin: '*',
-		// origin: process.env.FRONTEND_HOMEPAGE,
-		credentials: true,
-		methods: 'POST',
-	})
-);
-env.config();
-
-const { orderController } = require('./controllers/orderController');
+app.use(cors());
+env.config(corsOptions);
 
 const DB_URI = process.env.DB_URI;
 

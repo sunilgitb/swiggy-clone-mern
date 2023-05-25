@@ -32,7 +32,9 @@ const Home = () => {
 			// setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
 			// setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
 			setTotalOpenRestaurants(
-				data?.data?.cards?.[2]?.data?.data?.totalOpenRestaurants
+				data?.data?.cards?.filter(
+					el => el.cardType === 'seeAllRestaurants'
+				)?.[0]?.data?.data?.totalOpenRestaurants
 			);
 		} catch (err) {
 			try {
