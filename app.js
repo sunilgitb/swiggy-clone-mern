@@ -14,17 +14,30 @@ env.config(corsOptions);
 
 const DB_URI = process.env.DB_URI;
 
-mongoose.connect(DB_URI).then(conn => {
-	console.log(`DB connection successfull! : ${conn.connection.host}`);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(DB_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+const port = process.env.PORT || 2727;
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log('listening for requests');
+  });
 });
 
 app.post('/api/v1/order', orderController);
 
 app.all('*', (req, res) => {
-	res.status(400).json({
-		status: 'error',
-		message: `Can't find ${req.originalUrl} on this server!`,
-	});
+  res.status(400).json({
+    status: 'error',
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
 });
 
 module.exports = app;
