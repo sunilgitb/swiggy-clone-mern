@@ -25,9 +25,10 @@ const connectDB = async () => {
 };
 
 const port = process.env.PORT || 2727;
+
 connectDB().then(() => {
   app.listen(port, () => {
-    console.log('listening for requests');
+    console.log('listening for requests at 2727');
   });
 });
 

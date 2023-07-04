@@ -62,13 +62,25 @@ const CheckoutPage = () => {
       });
       arr.push({
         name: 'GST(3%)',
-        quantity: '--',
+        quantity: '',
         price: (subtotal * 0.03).toFixed(2),
       });
       arr.push({
-        name: 'Total',
-        quantity: quantity,
-        price: (subtotal * 1.03).toFixed(2),
+        name: '<b>Total</b>',
+        quantity: `<b>${quantity}</b>`,
+        price: `<b>${(subtotal * 1.03).toFixed(2)}</b>`,
+      });
+
+      setIsOrdering(false);
+      Swal.fire({
+        title: 'Order Successful!',
+        text: 'Check your email for order details!',
+        icon: 'success',
+      }).then(result => {
+        if (result.isConfirmed) {
+          dispatch(clearCart());
+          navigate('/');
+        }
       });
 
       await axios.post('https://swiggy-clone-wjqx.onrender.com/api/v1/order', {
@@ -79,18 +91,6 @@ const CheckoutPage = () => {
             price: `₹${el.price.toLocaleString()}`,
           };
         }),
-      });
-      setIsOrdering(false);
-
-      Swal.fire({
-        title: 'Order Successful!',
-        text: 'Check your email for order details!',
-        icon: 'success',
-      }).then(result => {
-        if (result.isConfirmed) {
-          dispatch(clearCart());
-          navigate('/');
-        }
       });
     } catch (error) {
       setIsOrdering(false);
@@ -295,13 +295,6 @@ const CheckoutPage = () => {
                   }
                 });
               }
-              Swal.fire({
-                title: 'Ordering...',
-                text: 'It can take some time to get order. Please wait!',
-                icon: 'success',
-                confirmButtonColor: '#3ed630',
-                confirmButtonText: 'Okay',
-              });
               sendEmailHandler();
             }}
             className="order-box">
