@@ -13,241 +13,268 @@ import { RxCross1 } from 'react-icons/rx';
 import SignInBox from '../SignInBox/SignInBox';
 import SignUpBox from '../SignUpBox/SignUpBox';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
+import PlaceBox from '../PlaceBox/PlaceBox';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Header = () => {
-	// NOTE: I am subscribing to store
-	const cartItems = useSelector(state => state.cart.items);
-	const isSigninSideVisible = useSelector(
-		state => state.loginBools.isSigninSideVisible
-	);
-	const dispatch = useDispatch();
-	const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
-	const [isLoginScreen, setIsLoginScreen] = useState(true);
-	const userAuth = useSelector(state => state.auth);
+  // NOTE: I am subscribing to store
+  const cartItems = useSelector(state => state.cart.items);
+  const isSigninSideVisible = useSelector(
+    state => state.loginBools.isSigninSideVisible
+  );
+  const dispatch = useDispatch();
+  const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
+  const [isLoginScreen, setIsLoginScreen] = useState(true);
+  const [isPlaceBoxVisible, setIsPlaceBoxVisible] = useState(false);
+  const userAuth = useSelector(state => state.auth);
+  const locationData = useSelector(state => state.location.location);
 
-	return (
-		<>
-			<div className="header-wrapper">
-				<div className="header">
-					<div className="logo">
-						<Link to={'/'}>
-							<LogoIcon />
-						</Link>
-						<div className="__left">
-							<span>Other</span>
-							<span>Patna, Bihar</span>
-							<span>
-								<VscChevronDown className="icon" />
-							</span>
-						</div>
-					</div>
+  return (
+    <>
+      <div className="header-wrapper">
+        <div className="header">
+          <div className="logo">
+            <Link to={'/'}>
+              <LogoIcon />
+            </Link>
+            <div onClick={() => setIsPlaceBoxVisible(true)} className="__left">
+              <span>{locationData?.place_type}</span>
+              <span
+                style={{
+                  maxWidth: '200px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}>
+                {locationData?.formatted_address}
+              </span>
+              <span>
+                <VscChevronDown className="icon" />
+              </span>
+            </div>
+          </div>
 
-					<div className="nav-links">
-						<div className="search">
-							<NavLink to={'/search'} className="link">
-								<SearchIcon className="icon" />
-								<span>Search</span>
-							</NavLink>
-						</div>
-						<NavLink to="/offers" className="link" id="offers">
-							<OffersIcon className="icon" />
-							<span>Offers</span>
-						</NavLink>
-						<div className="name">
-							{!userAuth.isAuth ? (
-								<span
-									onClick={() => {
-										dispatch(updateSigninSideVisible(true));
-									}}
-									className="link">
-									<SigninIcon className="icon" />
-									<span>Sign In</span>
-								</span>
-							) : (
-								<NavLink to={'/account'} className="link">
-									{userAuth?.user?.photoURL ? (
-										<img
-											src={userAuth?.user?.photoURL}
-											className="profile-img"
-										/>
-									) : (
-										<SigninIcon className="icon" />
-									)}
-									<span className="truncate">
-										{userAuth?.user?.displayName}
-									</span>
-								</NavLink>
-							)}
-						</div>
-						<div className="cart">
-							<NavLink to="/checkout" className="link">
-								<div>
-									<CartIcon
-										className={
-											cartItems?.length === 0
-												? 'cart-empty'
-												: 'cart-nonempty'
-										}
-									/>
-									<span
-										className={
-											cartItems?.length === 0
-												? 'item'
-												: 'item color-white'
-										}>
-										{cartItems?.length}
-									</span>
-								</div>
-								<span>Cart</span>
-							</NavLink>
-						</div>
-					</div>
-					<div
-						onClick={() => {
-							setIsMobileNavVisible(prev => !prev);
-						}}
-						className={`mobile-nav`}>
-						{!isMobileNavVisible ? (
-							<GoThreeBars className="bars" />
-						) : (
-							<RxCross1 className="bars" />
-						)}
-					</div>
-					{/* Mobile Nav */}
-				</div>
-			</div>
+          <div className="nav-links">
+            <div className="search">
+              <NavLink to={'/search'} className="link">
+                <SearchIcon className="icon" />
+                <span>Search</span>
+              </NavLink>
+            </div>
+            <NavLink to="/offers" className="link" id="offers">
+              <OffersIcon className="icon" />
+              <span>Offers</span>
+            </NavLink>
+            <div className="name">
+              {!userAuth.isAuth ? (
+                <span
+                  onClick={() => {
+                    dispatch(updateSigninSideVisible(true));
+                  }}
+                  className="link">
+                  <SigninIcon className="icon" />
+                  <span>Sign In</span>
+                </span>
+              ) : (
+                <NavLink to={'/account'} className="link">
+                  {userAuth?.user?.photoURL ? (
+                    <img
+                      src={userAuth?.user?.photoURL}
+                      className="profile-img"
+                    />
+                  ) : (
+                    <SigninIcon className="icon" />
+                  )}
+                  <span className="truncate">
+                    {userAuth?.user?.displayName}
+                  </span>
+                </NavLink>
+              )}
+            </div>
+            <div className="cart">
+              <NavLink to="/checkout" className="link">
+                <div>
+                  <CartIcon
+                    className={
+                      cartItems?.length === 0 ? 'cart-empty' : 'cart-nonempty'
+                    }
+                  />
+                  <span
+                    className={
+                      cartItems?.length === 0 ? 'item' : 'item color-white'
+                    }>
+                    {cartItems?.length}
+                  </span>
+                </div>
+                <span>Cart</span>
+              </NavLink>
+            </div>
+          </div>
+          <div
+            onClick={() => {
+              setIsMobileNavVisible(prev => !prev);
+            }}
+            className={`mobile-nav`}>
+            {!isMobileNavVisible ? (
+              <GoThreeBars className="bars" />
+            ) : (
+              <RxCross1 className="bars" />
+            )}
+          </div>
+          {/* Mobile Nav */}
+        </div>
+      </div>
 
-			<div
-				className={`mobile-nav-menu ${
-					!isMobileNavVisible ? 'bottom-to-top' : 'top-to-bottom'
-				}`}>
-				<div className="nav-links">
-					<div className="search">
-						<NavLink
-							onClick={() => setIsMobileNavVisible(false)}
-							to={'/search'}
-							className="link">
-							<SearchIcon className="icon" />
-							<span>Search</span>
-						</NavLink>
-					</div>
-					<NavLink
-						to="/offers"
-						onClick={() => setIsMobileNavVisible(false)}
-						className="link"
-						id="offers">
-						<OffersIcon className="icon" />
-						<span>Offers</span>
-					</NavLink>
-					<div className="name">
-						{!userAuth.isAuth ? (
-							<span
-								onClick={() => {
-									dispatch(updateSigninSideVisible(true));
-									setIsMobileNavVisible(false);
-								}}
-								className="link">
-								<SigninIcon className="icon" />
-								<span>Sign In</span>
-							</span>
-						) : (
-							<NavLink
-								to={'/account'}
-								onClick={() => setIsMobileNavVisible(false)}
-								className="link">
-								{userAuth?.user?.photoURL ? (
-									<img
-										src={userAuth?.user?.photoURL}
-										className="profile-img"
-									/>
-								) : (
-									<SigninIcon className="icon" />
-								)}
-								<div>
-									<span className="truncate2">
-										{
-											userAuth?.user?.displayName?.split(
-												' '
-											)?.[0]
-										}
-									</span>
-								</div>
-							</NavLink>
-						)}
-					</div>
-					<div className="cart">
-						<NavLink
-							to="/checkout"
-							onClick={() => setIsMobileNavVisible(false)}
-							className="link">
-							<div>
-								<CartIcon
-									className={
-										cartItems?.length === 0
-											? 'cart-empty'
-											: 'cart-nonempty'
-									}
-								/>
-								<span
-									className={
-										cartItems?.length === 0
-											? 'item'
-											: 'item color-white'
-									}>
-									{cartItems?.length}
-								</span>
-							</div>
-							<span>Cart</span>
-						</NavLink>
-					</div>
-				</div>
-			</div>
-			{isSigninSideVisible && <div className="black-mask"></div>}
-			<div className={`signin-side-wrapper`}>
-				<div
-					className={`signin-side ${
-						isSigninSideVisible ? 'visible-side' : ''
-					}`}>
-					<div className="top">
-						<div className="left">
-							<RxCross1
-								onClick={() =>
-									dispatch(updateSigninSideVisible(false))
-								}
-								className="icon"
-							/>
-							<div className="login-box">
-								<div className="login">
-									{isLoginScreen ? 'Login' : 'Sign up'}
-								</div>
-								<div className="create">
-									<span>or</span>
-									<span
-										onClick={() =>
-											setIsLoginScreen(prev => !prev)
-										}>
-										{isLoginScreen
-											? 'create an account'
-											: 'login to your account'}
-									</span>
-								</div>
-							</div>
-							<div className="style"></div>
-						</div>
-						<div className="right">
-							<img
-								src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r"
-								alt=""
-							/>
-						</div>
-					</div>
-					<div className="bottom">
-						{isLoginScreen ? <SignInBox /> : <SignUpBox />}
-					</div>
-				</div>
-			</div>
-		</>
-	);
+      <div
+        className={`mobile-nav-menu ${
+          !isMobileNavVisible ? 'bottom-to-top' : 'top-to-bottom'
+        }`}>
+        <div className="nav-links">
+          <div className="search">
+            <NavLink
+              onClick={() => setIsMobileNavVisible(false)}
+              to={'/search'}
+              className="link">
+              <SearchIcon className="icon" />
+              <span>Search</span>
+            </NavLink>
+          </div>
+          <NavLink
+            to="/offers"
+            onClick={() => setIsMobileNavVisible(false)}
+            className="link"
+            id="offers">
+            <OffersIcon className="icon" />
+            <span>Offers</span>
+          </NavLink>
+          <div className="name">
+            {!userAuth.isAuth ? (
+              <span
+                onClick={() => {
+                  dispatch(updateSigninSideVisible(true));
+                  setIsMobileNavVisible(false);
+                }}
+                className="link">
+                <SigninIcon className="icon" />
+                <span>Sign In</span>
+              </span>
+            ) : (
+              <NavLink
+                to={'/account'}
+                onClick={() => setIsMobileNavVisible(false)}
+                className="link">
+                {userAuth?.user?.photoURL ? (
+                  <img src={userAuth?.user?.photoURL} className="profile-img" />
+                ) : (
+                  <SigninIcon className="icon" />
+                )}
+                <div>
+                  <span className="truncate2">
+                    {userAuth?.user?.displayName?.split(' ')?.[0]}
+                  </span>
+                </div>
+              </NavLink>
+            )}
+          </div>
+          <div className="cart">
+            <NavLink
+              to="/checkout"
+              onClick={() => setIsMobileNavVisible(false)}
+              className="link">
+              <div>
+                <CartIcon
+                  className={
+                    cartItems?.length === 0 ? 'cart-empty' : 'cart-nonempty'
+                  }
+                />
+                <span
+                  className={
+                    cartItems?.length === 0 ? 'item' : 'item color-white'
+                  }>
+                  {cartItems?.length}
+                </span>
+              </div>
+              <span>Cart</span>
+            </NavLink>
+          </div>
+        </div>
+      </div>
+      {(isSigninSideVisible || isPlaceBoxVisible) && (
+        <div
+          onClick={e => {
+            setIsPlaceBoxVisible(false);
+            dispatch(updateSigninSideVisible(false));
+          }}
+          className="black-mask"></div>
+      )}
+      <div className={`signin-side-wrapper`}>
+        <div
+          className={`signin-side ${
+            isSigninSideVisible ? 'visible-side' : ''
+          }`}>
+          <div className="top">
+            <div className="left">
+              <RxCross1
+                onClick={() => dispatch(updateSigninSideVisible(false))}
+                className="icon"
+              />
+              <div className="login-box">
+                <div className="login">
+                  {isLoginScreen ? 'Login' : 'Sign up'}
+                </div>
+                <div className="create">
+                  <span>or</span>
+                  <span onClick={() => setIsLoginScreen(prev => !prev)}>
+                    {isLoginScreen
+                      ? 'create an account'
+                      : 'login to your account'}
+                  </span>
+                </div>
+              </div>
+              <div className="style"></div>
+            </div>
+            <div className="right">
+              <img
+                src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/Image-login_btpq7r"
+                alt=""
+              />
+            </div>
+          </div>
+          <div className="bottom">
+            {isLoginScreen ? <SignInBox /> : <SignUpBox />}
+          </div>
+        </div>
+      </div>
+      <div>
+        <AnimatePresence onExitComplete={true}>
+          {isPlaceBoxVisible && (
+            <motion.div
+              initial={{
+                x: '-100vw',
+                opacity: 0,
+              }}
+              animate={{
+                x: 0,
+                opacity: 1,
+                transition: {
+                  type: 'just',
+                },
+              }}
+              exit={{
+                x: '-100vw',
+                opacity: 0,
+                transition: {
+                  ease: 'easeInOut',
+                },
+              }}
+              className={`place_box_side`}>
+              <PlaceBox setIsPlaceBoxVisible={setIsPlaceBoxVisible} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
+  );
 };
 
 export default Header;
