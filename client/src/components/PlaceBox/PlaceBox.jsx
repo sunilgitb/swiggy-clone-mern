@@ -24,6 +24,7 @@ const PlaceBox = ({ setIsPlaceBoxVisible }) => {
 
   const getPlaceData = async placeId => {
     setIsPlaceBoxVisible(false);
+
     try {
       const { data } = await axios.get(
         `https://corsproxy.io/?https://www.swiggy.com/dapi/misc/address-recommend?place_id=${placeId}`
@@ -51,17 +52,18 @@ const PlaceBox = ({ setIsPlaceBoxVisible }) => {
 
   useEffect(() => {
     if (state.area.trim() === '') return;
-    setIsLoading(true);
+
     const getData = async () => {
+      setIsLoading(true);
       const { data } = await axios.get(
         `https://corsproxy.io/?https://www.swiggy.com/dapi/misc/place-autocomplete?input=${state?.area}&types=`
       );
       setPlaces(data?.data);
+      setIsLoading(false);
     };
     clearTimeout(timestamp);
     timestamp = setTimeout(() => {
       getData();
-      setIsLoading(false);
     }, 1500);
   }, [state]);
 

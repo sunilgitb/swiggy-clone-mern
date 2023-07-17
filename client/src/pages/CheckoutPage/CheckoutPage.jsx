@@ -28,6 +28,7 @@ const CheckoutPage = () => {
   const [isOrdering, setIsOrdering] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  document.title = `Checkout :: Swiggy Clone - Vivek Kumar`;
   const verifyAccount = async () => {
     try {
       await sendEmailVerification(auth.currentUser);
