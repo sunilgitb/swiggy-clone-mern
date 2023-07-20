@@ -18,11 +18,8 @@ export const SEARCH_LINK_API =
 export const SUGGESTION_ITEM_API =
   'https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/search/v3?lat=25.5940947&lng=85.1375645&str=Domino%27s%20Pizza&submitAction=SUGGESTION&metaData=';
 
-export const LOGIN_API_LINK =
-  'https://swiggy-clone-wjqx.onrender.com/api/v1/user/login';
-export const LOGOUT_API_LINK =
-  'https://swiggy-clone-wjqx.onrender.com/api/v1/user/logout';
-export const REGISTER_API_LINK =
-  'https://swiggy-clone-wjqx.onrender.com/api/v1/user/register';
+export const LOGIN_API_LINK = 'http://127.0.0.1:2727/api/v1/user/login';
+export const LOGOUT_API_LINK = 'http://127.0.0.1:2727/api/v1/user/logout';
+export const REGISTER_API_LINK = 'http://127.0.0.1:2727/api/v1/user/register';
 export const LOGIN_WITH_TOKEN_API_LINK =
-  'https://swiggy-clone-wjqx.onrender.com/api/v1/user/login-with-token';
+  'http://127.0.0.1:2727/api/v1/user/login-with-token';

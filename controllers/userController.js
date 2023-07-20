@@ -63,6 +63,7 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log(req.body);
   if (!email || !password) {
     return res.status(400).json({
       status: 'fail',
@@ -71,7 +72,7 @@ const loginUser = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ email }).select('-password');
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
         status: 'fail',
@@ -95,19 +96,24 @@ const loginUser = async (req, res) => {
       { expiresIn: process.env.JWT_TOKEN_EXPIRES_IN }
     );
 
-    res
-      .cookie('token', accessToken, {
-        httpOnly: true,
-        expiresIn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        secure: process.env.NODE_ENV === 'production',
-      })
-      .status(200)
-      .json({
-        status: 'success',
-        data: {
-          user,
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: {
+          token: accessToken,
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          address: user.address,
+          isVerified: user.isVerified,
+          isAdmin: user.isAdmin,
+          payments: user.payments,
+          orderList: user.orderList,
+          cartList: user.cartList,
+          createdAt: user.createdAt,
         },
-      });
+      },
+    });
   } catch (error) {
     res.status(500).json({
       status: 'fail',
@@ -119,7 +125,7 @@ const loginUser = async (req, res) => {
 const loginWithToken = async (req, res) => {
   const { token } = req.body;
   if (!token) {
-    res.status(401).json({
+    return res.status(401).json({
       status: 'fail',
       message: 'Token expired, Login again!',
     });
