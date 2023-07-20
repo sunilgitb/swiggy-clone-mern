@@ -58,11 +58,13 @@ const SignUpBox = ({}) => {
       });
       if (result.isConfirmed) {
         dispatch(updateSigninSideVisible(true));
-        setIsLoggingIn('');
+        setIsLoggingIn(false);
+      } else {
+        setIsLoggingIn(false);
       }
     } catch (error) {
       Swal.fire('Failed!', error?.response?.data?.message, 'error');
-      setIsLoggingIn('');
+      setIsLoggingIn(false);
     }
 
     // createUserWithEmailAndPassword(auth, state.email, state.password)
