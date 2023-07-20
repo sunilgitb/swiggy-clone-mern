@@ -71,7 +71,7 @@ const loginUser = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('-password');
     if (!user) {
       return res.status(404).json({
         status: 'fail',
@@ -105,12 +105,7 @@ const loginUser = async (req, res) => {
       .json({
         status: 'success',
         data: {
-          user: {
-            name: user.name,
-            email: user.email,
-            token: accessToken,
-            id: user._id,
-          },
+          user,
         },
       });
   } catch (error) {
