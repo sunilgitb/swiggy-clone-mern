@@ -32,3 +32,5 @@ export const VERIFY_ACC_API_LINK =
   'https://swiggy-clone-wjqx.onrender.com/api/v1/user/verify-account';
 export const SEND_VERIFY_ACC_API_LINK =
   'https://swiggy-clone-wjqx.onrender.com/api/v1/user/send-email-verify-account';
+export const ORDER_API_LINK =
+  'https://swiggy-clone-wjqx.onrender.com/api/v1/order';

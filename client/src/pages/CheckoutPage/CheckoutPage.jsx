@@ -3,7 +3,7 @@ import PaddingTop from '../../utils/PaddingTop';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { IMG_LINK } from '../../utils/config';
+import { IMG_LINK, ORDER_API_LINK } from '../../utils/config';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import {
   clearCart,
@@ -84,7 +84,7 @@ const CheckoutPage = () => {
         }
       });
 
-      await axios.post('https://swiggy-clone-wjqx.onrender.com/api/v1/order', {
+      await axios.post(ORDER_API_LINK, {
         token: window.localStorage.getItem('token'),
         userData,
         orderList: arr.map(el => {
