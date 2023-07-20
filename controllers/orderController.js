@@ -26,7 +26,7 @@ const orderController = async (req, res) => {
 
     const link = `${process.env.RESET_PASSWORD_HOST}/account`;
 
-    const emailBody = orderCompleteMail(user.name, link, orderListNew);
+    const emailBody = orderCompleteMail(user, link, orderListNew);
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: user.email,
