@@ -324,7 +324,7 @@ const verifyUserAccount = async (req, res) => {
   }
 };
 const logoutUser = async (req, res) => {
-  console.log(req.cookies.token);
+  // console.log(req.cookies.token);
   res.clearCookie('token').status(200).json({
     status: 'success',
     message: 'Logout successfully!',

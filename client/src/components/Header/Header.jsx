@@ -226,6 +226,9 @@ const Header = () => {
               isActive ? 'nav-bottom-btn active-nav' : 'nav-bottom-btn'
             }>
             <BsBag className="icon-btm" />
+            {cartItems?.length !== 0 && (
+              <span className="tag">{cartItems?.length}</span>
+            )}
             <div className="text">Cart</div>
           </NavLink>
           <NavLink
