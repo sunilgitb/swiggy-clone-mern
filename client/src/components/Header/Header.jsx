@@ -4,11 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { ReactComponent as CartIcon } from './../../assets/icons/cart.svg';
 import { ReactComponent as LogoIcon } from './../../assets/icons/logo.svg';
+import { ReactComponent as LogoIconBW } from './../../assets/icons/logoBW.svg';
 import { ReactComponent as SearchIcon } from './../../assets/icons/search.svg';
 import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { ReactComponent as SigninIcon } from './../../assets/icons/signin.svg';
 import { VscChevronDown } from 'react-icons/vsc';
+import { CiLocationOn } from 'react-icons/ci';
 import { GoThreeBars } from 'react-icons/go';
+import { BsBag } from 'react-icons/bs';
 import { RxCross1 } from 'react-icons/rx';
 import SignInBox from '../SignInBox/SignInBox';
 import SignUpBox from '../SignUpBox/SignUpBox';
@@ -34,23 +37,22 @@ const Header = () => {
       <div className="header-wrapper">
         <div className="header">
           <div className="logo">
-            <Link to={'/'}>
+            <Link className="logo-link" to={'/'}>
               <LogoIcon />
             </Link>
             <div onClick={() => setIsPlaceBoxVisible(true)} className="__left">
-              <span>{locationData?.place_type}</span>
-              <span
-                style={{
-                  maxWidth: '200px',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}>
-                {locationData?.formatted_address}
+              <span className="type">
+                <CiLocationOn className="icon" />
+                {locationData?.place_type}
               </span>
-              <span>
-                <VscChevronDown className="icon" />
-              </span>
+              <div className="__left-location">
+                <p className="formated-address">
+                  {locationData?.formatted_address}
+                </p>
+                <span>
+                  <VscChevronDown className="icon" />
+                </span>
+              </div>
             </div>
           </div>
 
@@ -85,9 +87,7 @@ const Header = () => {
                   ) : (
                     <SigninIcon className="icon" />
                   )}
-                  <span className="truncate">
-                    {userAuth?.user?.displayName}
-                  </span>
+                  <span className="truncate">{userAuth?.user?.name}</span>
                 </NavLink>
               )}
             </div>
@@ -110,7 +110,7 @@ const Header = () => {
               </NavLink>
             </div>
           </div>
-          <div
+          {/* <div
             onClick={() => {
               setIsMobileNavVisible(prev => !prev);
             }}
@@ -120,12 +120,12 @@ const Header = () => {
             ) : (
               <RxCross1 className="bars" />
             )}
-          </div>
+          </div> */}
           {/* Mobile Nav */}
         </div>
       </div>
 
-      <div
+      {/* <div
         className={`mobile-nav-menu ${
           !isMobileNavVisible ? 'bottom-to-top' : 'top-to-bottom'
         }`}>
@@ -170,7 +170,7 @@ const Header = () => {
                 )}
                 <div>
                   <span className="truncate2">
-                    {userAuth?.user?.displayName?.split(' ')?.[0]}
+                    {userAuth?.user?.name?.split(' ')?.[0]}
                   </span>
                 </div>
               </NavLink>
@@ -198,7 +198,47 @@ const Header = () => {
             </NavLink>
           </div>
         </div>
+      </div> */}
+
+      {/* Mobile Bottom Nav */}
+
+      <div className="mobile-bottom-nav">
+        <div className="nav">
+          <NavLink
+            to={'/'}
+            className={({ isActive }) =>
+              isActive ? 'nav-bottom-btn active-nav' : 'nav-bottom-btn'
+            }>
+            <LogoIconBW className="icon-btm" />
+            <div className="text">Swiggy</div>
+          </NavLink>
+          <NavLink
+            to={'/search'}
+            className={({ isActive }) =>
+              isActive ? 'nav-bottom-btn active-nav' : 'nav-bottom-btn'
+            }>
+            <SearchIcon className="icon-btm" />
+            <div className="text">Search</div>
+          </NavLink>
+          <NavLink
+            to={'/checkout'}
+            className={({ isActive }) =>
+              isActive ? 'nav-bottom-btn active-nav' : 'nav-bottom-btn'
+            }>
+            <BsBag className="icon-btm" />
+            <div className="text">Cart</div>
+          </NavLink>
+          <NavLink
+            to={'/account'}
+            className={({ isActive }) =>
+              isActive ? 'nav-bottom-btn active-nav' : 'nav-bottom-btn'
+            }>
+            <SigninIcon className="icon-btm" />
+            <div className="text">Account</div>
+          </NavLink>
+        </div>
       </div>
+
       {(isSigninSideVisible || isPlaceBoxVisible) && (
         <div
           onClick={e => {

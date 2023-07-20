@@ -12,100 +12,91 @@ import Search from './pages/Search/Search';
 import { useEffect } from 'react';
 import { updateCart } from './redux/slice/cartSlice';
 import Profile from './pages/Profile/Profile';
-import { auth } from './auth/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { login } from './redux/slice/authSlice';
+import axios from 'axios';
+import { LOGIN_WITH_TOKEN_API_LINK } from './utils/config';
 
 const AppLayout = () => {
-	const cart = useSelector(state => state.cart.items);
-	const dispatch = useDispatch();
-	const setCartToLocalStorage = () => {
-		window.localStorage.setItem('sw_cart_data', JSON.stringify(cart));
-	};
-	const getCartToLocalStorage = () => {
-		const cartData = window.localStorage.getItem('sw_cart_data')
-			? JSON.parse(window.localStorage.getItem('sw_cart_data'))
-			: [];
-		dispatch(updateCart(cartData));
-	};
-	useEffect(() => {
-		getCartToLocalStorage();
-		onAuthStateChanged(auth, user => {
-			if (user) {
-				dispatch(
-					login({
-						displayName: user.displayName,
-						email: user.email,
-						photoURL: user.photoURL,
-						emailVerified: user.emailVerified,
-						providerId: user?.providerId,
-					})
-				);
-			}
-		});
-	}, []);
-	useEffect(() => {
-		setCartToLocalStorage();
-	}, [cart]);
+  const cart = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
+  const setCartToLocalStorage = () => {
+    window.localStorage.setItem('sw_cart_data', JSON.stringify(cart));
+  };
+  const getCartToLocalStorage = () => {
+    const cartData = window.localStorage.getItem('sw_cart_data')
+      ? JSON.parse(window.localStorage.getItem('sw_cart_data'))
+      : [];
+    dispatch(updateCart(cartData));
+  };
+  const loginWithToken = async () => {
+    const { data } = await axios.get(LOGIN_WITH_TOKEN_API_LINK);
+    console.log(data);
+  };
+  useEffect(() => {
+    getCartToLocalStorage();
+    loginWithToken();
+  }, []);
+  useEffect(() => {
+    setCartToLocalStorage();
+  }, [cart]);
 
-	return (
-		<>
-			<Header />
-			<Outlet />
-			<Footer />
-			<div
-				style={{
-					fontSize: '1.5rem',
-				}}></div>
-		</>
-	);
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+      <div
+        style={{
+          fontSize: '1.5rem',
+        }}></div>
+    </>
+  );
 };
 
 const appRouter = createBrowserRouter([
-	{
-		path: '/',
-		element: <AppLayout />,
-		errorElement: (
-			<>
-				<Header />
-				<Error />
-				<Footer />
-			</>
-		),
-		children: [
-			{
-				path: '/',
-				element: <Home />,
-			},
-			{
-				path: '/offers',
-				element: <Offers />,
-			},
-			{
-				path: '/checkout',
-				element: <CheckoutPage />,
-			},
-			{
-				path: '/search',
-				element: <Search />,
-			},
-			{
-				path: '/account',
-				element: <Profile />,
-			},
-			{
-				path: '/restaurants/:slug',
-				element: <RestaurantPage />,
-			},
-		],
-	},
+  {
+    path: '/',
+    element: <AppLayout />,
+    errorElement: (
+      <>
+        <Header />
+        <Error />
+        <Footer />
+      </>
+    ),
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/offers',
+        element: <Offers />,
+      },
+      {
+        path: '/checkout',
+        element: <CheckoutPage />,
+      },
+      {
+        path: '/search',
+        element: <Search />,
+      },
+      {
+        path: '/account',
+        element: <Profile />,
+      },
+      {
+        path: '/restaurants/:slug',
+        element: <RestaurantPage />,
+      },
+    ],
+  },
 ]);
 
 const App = () => {
-	return (
-		<Provider store={store}>
-			<RouterProvider router={appRouter} />
-		</Provider>
-	);
+  return (
+    <Provider store={store}>
+      <RouterProvider router={appRouter} />
+    </Provider>
+  );
 };
 export default App;

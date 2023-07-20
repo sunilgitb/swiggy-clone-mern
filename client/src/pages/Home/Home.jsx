@@ -176,7 +176,7 @@ const Home = () => {
           </p>
         </div>
       )}
-      <FloatingCart />
+      {/* <FloatingCart /> */}
     </PaddingTop>
   );
 };

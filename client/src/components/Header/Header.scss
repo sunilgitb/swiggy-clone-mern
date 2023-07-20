@@ -20,36 +20,80 @@
       display: flex;
       align-items: center;
       gap: 4rem;
+      width: 50%;
       .__left {
         display: flex;
         align-items: center;
+        justify-content: start;
         gap: 1rem;
+        width: 100%;
 
-        span {
-          font-size: 1.4rem;
-          font-weight: 400;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          color: var(--color-grey-black);
-          .icon {
-            color: var(--color-black-link);
-            font-size: 2rem;
-            font-weight: 600;
-          }
-          &:first-child {
-            font-weight: 700;
-            border-bottom: 2px solid var(--color-black-link);
-          }
-        }
         &:hover {
-          & > span {
+          .type {
+            color: var(--color-red);
+          }
+          .__left-location > span {
             .icon {
               color: var(--color-red);
             }
             &:first-child {
               color: var(--color-red);
               border-bottom: 2px solid var(--color-red);
+            }
+          }
+        }
+
+        .type {
+          display: inline-block;
+          font-size: 1.4rem;
+          font-weight: 400;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 3px;
+          cursor: pointer;
+          color: var(--color-grey-black);
+          font-weight: 700;
+          border-bottom: 2px solid var(--color-black-link);
+
+          .icon {
+            display: none;
+            font-size: 2rem;
+            color: var(--color-yellow);
+          }
+        }
+
+        .__left-location {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          width: 50%;
+
+          .formated-address {
+            font-size: 1.4rem;
+            font-weight: 400;
+            display: inline-block;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
+            color: var(--color-grey-black);
+            width: 80%;
+            max-width: fit-content;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          span {
+            font-size: 1.4rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--color-grey-black);
+            .icon {
+              color: var(--color-black-link);
+              font-size: 2rem;
+              font-weight: 600;
             }
           }
         }
@@ -175,12 +219,35 @@
     }
   }
   @media screen and (max-width: 768px) {
-    .header .nav-links .search {
-      display: none;
+    .header {
+      .nav-links .search {
+        display: none;
+      }
     }
-    .header .nav-links #offers {
-      display: none;
+    .header .logo {
+      width: 70%;
+      .logo-link {
+        display: none;
+      }
+      .__left {
+        flex-direction: column;
+        align-items: start;
+        gap: 0;
+        width: 100%;
+        .type {
+          border-bottom: 0;
+          font-size: 1.7rem;
+          font-weight: 800;
+          .icon {
+            display: flex;
+          }
+        }
+        .__left-location {
+          width: 100%;
+        }
+      }
     }
+
     .header .nav-links .name {
       display: none;
     }
@@ -195,139 +262,193 @@
 
 // Monile nav
 
-.mobile-nav-menu {
+// .mobile-nav-menu {
+//   position: fixed;
+//   background: #f5f5f5ee;
+//   z-index: 98;
+//   height: 50vh;
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   .nav-links {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     flex-direction: column;
+//     gap: 3rem;
+
+//     .search {
+//       .input-wrapper {
+//         position: relative;
+//         input {
+//           padding: 5px;
+//           font-size: 1.5rem;
+//           outline: none;
+//           border: 1px solid var(--color-grey-black);
+
+//           &::placeholder {
+//             color: var(--color-dark-grey);
+//           }
+//         }
+//         .cross {
+//           position: absolute;
+//           right: 0;
+//           top: 50%;
+//           transform: translate(0, -50%);
+//           height: 100%;
+//           width: 30px;
+//           padding: 5px;
+//           cursor: pointer;
+//         }
+//       }
+//     }
+
+//     .link {
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       gap: 7px;
+//       cursor: pointer;
+
+//       div {
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         position: relative;
+//       }
+//       .truncate2 {
+//         width: 45px;
+//         white-space: nowrap;
+//         overflow: hidden;
+//         text-overflow: ellipsis;
+//       }
+
+//       .profile-img {
+//         height: 30px;
+//         width: 30px;
+//         object-fit: cover;
+//         border-radius: 100%;
+//       }
+
+//       .item {
+//         position: absolute;
+//         top: 50%;
+//         left: 50%;
+//         transform: translate(-50%, -50%);
+//         color: var(--color-black-link);
+//         font-size: 1.4rem;
+//         font-weight: 600;
+//       }
+
+//       .icon {
+//         stroke: var(--color-black-link);
+//         stroke-width: 0;
+//         fill: var(--color-black-link);
+//       }
+
+//       span {
+//         font-size: 1.6rem;
+//         font-weight: 600;
+//         color: var(--color-black-link);
+//       }
+
+//       .cart-empty {
+//         stroke: var(--color-black-link);
+//       }
+//       .cart-nonempty {
+//         stroke: var(--color-green);
+//         fill: var(--color-green);
+//       }
+//       .color-white {
+//         color: var(--color-white);
+//       }
+
+//       &:hover {
+//         .icon {
+//           fill: var(--color-red);
+//         }
+//         .cart-empty {
+//           stroke: var(--color-red);
+//         }
+//         .cart-nonempty {
+//           stroke: var(--color-red);
+//           fill: var(--color-red);
+//         }
+//         span {
+//           color: var(--color-red);
+//         }
+//         .color-white {
+//           color: var(--color-white);
+//         }
+//       }
+//     }
+//   }
+// }
+
+// .top-to-bottom {
+//   top: 80px;
+//   animation: topToBottom 0.5s ease-in-out;
+//   transform: translateY(0);
+// }
+// .bottom-to-top {
+//   top: 0;
+//   animation: bottomToTop 0.5s ease-in-out;
+//   transform: translateY(-100%);
+// }
+
+// Mobole Bottom Nav
+
+.mobile-bottom-nav {
   position: fixed;
-  background: #f5f5f5ee;
-  z-index: 98;
-  height: 50vh;
+  left: 0;
+  bottom: 0;
+  height: 65px;
   width: 100%;
-  display: flex;
+  margin: auto;
+  background: #ffffff;
+  z-index: 999999;
+  display: none;
   align-items: center;
   justify-content: center;
-  .nav-links {
+  border-top: 1px solid var(--color-dark-grey);
+
+  .nav {
+    width: 90%;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 3rem;
-
-    .search {
-      .input-wrapper {
-        position: relative;
-        input {
-          padding: 5px;
-          font-size: 1.5rem;
-          outline: none;
-          border: 1px solid var(--color-grey-black);
-
-          &::placeholder {
-            color: var(--color-dark-grey);
-          }
-        }
-        .cross {
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translate(0, -50%);
-          height: 100%;
-          width: 30px;
-          padding: 5px;
-          cursor: pointer;
-        }
-      }
+    justify-content: space-between;
+    position: relative;
+    .active-nav {
+      fill: #000;
     }
-
-    .link {
+    .nav-bottom-btn {
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      cursor: pointer;
+      flex-direction: column;
+      gap: 0.7rem;
 
-      div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-      }
-      .truncate2 {
-        width: 45px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .profile-img {
-        height: 30px;
-        width: 30px;
-        object-fit: cover;
-        border-radius: 100%;
-      }
-
-      .item {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: var(--color-black-link);
-        font-size: 1.4rem;
-        font-weight: 600;
-      }
-
-      .icon {
-        stroke: var(--color-black-link);
-        stroke-width: 0;
-        fill: var(--color-black-link);
-      }
-
-      span {
-        font-size: 1.6rem;
-        font-weight: 600;
+      .icon-btm {
+        height: 35%;
+        width: 100%;
         color: var(--color-black-link);
       }
-
-      .cart-empty {
-        stroke: var(--color-black-link);
-      }
-      .cart-nonempty {
-        stroke: var(--color-green);
-        fill: var(--color-green);
-      }
-      .color-white {
-        color: var(--color-white);
-      }
-
-      &:hover {
-        .icon {
-          fill: var(--color-red);
-        }
-        .cart-empty {
-          stroke: var(--color-red);
-        }
-        .cart-nonempty {
-          stroke: var(--color-red);
-          fill: var(--color-red);
-        }
-        span {
-          color: var(--color-red);
-        }
-        .color-white {
-          color: var(--color-white);
-        }
+      .text {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: var(--color-grey-black);
       }
     }
   }
 }
-
-.top-to-bottom {
-  top: 80px;
-  animation: topToBottom 0.5s ease-in-out;
-  transform: translateY(0);
-}
-.bottom-to-top {
-  top: 0;
-  animation: bottomToTop 0.5s ease-in-out;
-  transform: translateY(-100%);
+@media screen and (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
 }
 
 @keyframes topToBottom {

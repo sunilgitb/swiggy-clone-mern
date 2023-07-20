@@ -1,23 +1,44 @@
+const User = require('../model/userModel');
 const { orderCompleteMail } = require('./../config/mailGen');
-const transporter = require('./../config/emailConfig');
 
 const orderController = async (req, res) => {
-	const { userData, orderList } = req.body;
+	const { id } = req.body;
+	const orderListNew = req.body.orderList;
 
 	try {
-		const emailBody = orderCompleteMail(userData, orderList);
+		const user = await User.findOne({ _id: id });
+		if (!user) {
+			return res.status(404).json({
+				status: 'fail',
+				message: `User doesn't exists!`,
+			});
+		}
+		if (!user.verified) {
+			return res.status(400).json({
+				status: 'fail',
+				message: `Please verify your account to place order!`,
+			});
+		}
+		await User.updateOne(
+			{ _id: id },
+			{ orderList: [...user.orderList, ...orderListNew] }
+		);
+
+		const link = `${process.env.RESET_PASSWORD_HOST}/account`;
+
+		const emailBody = orderCompleteMail(user.name, link, orderListNew);
 		await transporter.sendMail({
 			from: process.env.EMAIL_FROM,
-			to: userData.email,
+			to: user.email,
 			subject: 'Swiggy Clone: Order confirmation email!',
 			html: emailBody,
 		});
+
 		res.status(200).json({
 			status: 'success',
 			message: 'Order placed successfully!',
 		});
 	} catch (error) {
-		console.log(error);
 		res.status(500).json({
 			status: 'fail',
 			message: 'Something went wrong!',

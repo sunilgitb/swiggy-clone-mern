@@ -1,14 +1,17 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const env = require('dotenv');
 const corsOptions = require('./config/corsOptions');
-const { orderController } = require('./controllers/orderController');
+const userRoutes = require('./routes/userRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(cors());
 env.config(corsOptions);
 
@@ -32,7 +35,8 @@ connectDB().then(() => {
   });
 });
 
-app.post('/api/v1/order', orderController);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/order', orderRoutes);
 
 app.all('*', (req, res) => {
   res.status(400).json({
