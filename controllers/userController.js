@@ -11,10 +11,16 @@ const getUser = async (req, res) => {
     status: 'success',
     data: {
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
-        id: user._id,
+        address: user.address,
+        isVerified: user.isVerified,
+        isAdmin: user.isAdmin,
+        payments: user.payments,
         orderList: user.orderList,
+        cartList: user.cartList,
+        createdAt: user.createdAt,
       },
     },
   });
@@ -63,7 +69,7 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   if (!email || !password) {
     return res.status(400).json({
       status: 'fail',
@@ -289,10 +295,9 @@ const sendVerifyUserAccountEmail = async (req, res) => {
     // Creating link
     const link = `${process.env.RESET_PASSWORD_HOST}/user/verify-account-link/${user._id}/${token}`;
 
-    const emailBody = verifyAccountMail(user.name, link);
+    const emailBody = verifyAccountMail(user, link);
 
     // Sending verification mail
-
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: user.email,
@@ -331,7 +336,7 @@ const verifyUserAccount = async (req, res) => {
   try {
     jwt.verify(token, new_secret);
 
-    await User.findOneAndUpdate({ _id: id }, { $set: { verified: true } });
+    await User.findOneAndUpdate({ _id: id }, { $set: { isVerified: true } });
     res.status(200).json({
       status: 'success',
       message: 'Account verified successfully!',

@@ -24,7 +24,7 @@ const CheckoutPage = () => {
   const cart = useSelector(state => state.cart.items);
   const userAuth = useSelector(state => state.auth.isAuth);
   const userData = useSelector(state => state.auth.user);
-  const emailVerified = useSelector(state => state.auth.user.emailVerified);
+  const isVerified = useSelector(state => state.auth.user.isVerified);
   const [isOrdering, setIsOrdering] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -84,15 +84,15 @@ const CheckoutPage = () => {
         }
       });
 
-      // await axios.post('https://swiggy-clone-wjqx.onrender.com/api/v1/order', {
-      //   userData,
-      //   orderList: arr.map(el => {
-      //     return {
-      //       ...el,
-      //       price: `₹${el.price.toLocaleString()}`,
-      //     };
-      //   }),
-      // });
+      await axios.post('https://swiggy-clone-wjqx.onrender.com/api/v1/order', {
+        userData,
+        orderList: arr.map(el => {
+          return {
+            ...el,
+            price: `₹${el.price.toLocaleString()}`,
+          };
+        }),
+      });
     } catch (error) {
       setIsOrdering(false);
       Swal.fire('Failed!', error.message, 'error');
@@ -281,21 +281,21 @@ const CheckoutPage = () => {
                   }
                 });
               }
-              // if (!emailVerified) {
-              //   return Swal.fire({
-              //     title: 'Please verify email!',
-              //     text: 'We will send order details to email!',
-              //     icon: 'warning',
-              //     showCancelButton: true,
-              //     confirmButtonColor: '#3085d6',
-              //     cancelButtonColor: '#d33',
-              //     confirmButtonText: 'Verify!',
-              //   }).then(result => {
-              //     if (result.isConfirmed) {
-              //       verifyAccount();
-              //     }
-              //   });
-              // }
+              if (!isVerified) {
+                return Swal.fire({
+                  title: 'Please verify email!',
+                  text: 'We will send order details to email!',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Verify!',
+                }).then(result => {
+                  if (result.isConfirmed) {
+                    verifyAccount();
+                  }
+                });
+              }
               sendEmailHandler();
             }}
             className="order-box">

@@ -15,6 +15,7 @@ import Profile from './pages/Profile/Profile';
 import axios from 'axios';
 import { LOGIN_WITH_TOKEN_API_LINK } from './utils/config';
 import { login } from './redux/slice/authSlice';
+import VerifyAccountPage from './pages/VerifyAccountPage/VerifyAccountPage';
 
 const AppLayout = () => {
   const cart = useSelector(state => state.cart.items);
@@ -34,7 +35,7 @@ const AppLayout = () => {
       const { data } = await axios.post(LOGIN_WITH_TOKEN_API_LINK, { token });
       dispatch(login(data?.data?.user));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   useEffect(() => {
@@ -93,6 +94,10 @@ const appRouter = createBrowserRouter([
       {
         path: '/restaurants/:slug',
         element: <RestaurantPage />,
+      },
+      {
+        path: '/user/verify-account-link/:id/:token',
+        element: <VerifyAccountPage />,
       },
     ],
   },

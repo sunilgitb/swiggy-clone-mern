@@ -2,13 +2,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Profile.scss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { logout } from '../../redux/slice/authSlice';
+import { login, logout } from '../../redux/slice/authSlice';
 import Swal from 'sweetalert2';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
-import { sendEmailVerification, signOut } from 'firebase/auth';
-import { auth } from '../../auth/firebase';
 import axios from 'axios';
-import { LOGOUT_API_LINK } from '../../utils/config';
+import {
+  CURR_USER_API_LINK,
+  LOGOUT_API_LINK,
+  SEND_VERIFY_ACC_API_LINK,
+} from '../../utils/config';
 
 const Profile = () => {
   const authData = useSelector(state => state.auth);
@@ -17,7 +19,9 @@ const Profile = () => {
 
   const verifyAccount = async () => {
     try {
-      await sendEmailVerification(auth.currentUser);
+      await axios.post(SEND_VERIFY_ACC_API_LINK, {
+        token: window.localStorage.getItem('token'),
+      });
       Swal.fire('Check email!', `Verification send to email!`, 'success');
     } catch (error) {
       Swal.fire('Failed!', error.message, 'error');
@@ -36,12 +40,22 @@ const Profile = () => {
     }
   };
 
+  const getUserData = async () => {
+    const { data } = await axios.post(CURR_USER_API_LINK, {
+      token: window.localStorage.getItem('token'),
+    });
+    dispatch(login(data?.data?.user));
+  };
+
   useEffect(() => {
     if (!authData.isAuth) {
       navigate('/');
       dispatch(updateSigninSideVisible(true));
     }
   }, [authData.isAuth]);
+  useEffect(() => {
+    getUserData();
+  }, []);
   return (
     <div className="profile-wrapper">
       <div className="profile">
@@ -64,7 +78,7 @@ const Profile = () => {
             <div className="name">{authData?.user?.name}</div>
             <div className="email">
               {authData?.user?.email}{' '}
-              {!authData?.user?.emailVerified ? (
+              {!authData?.user?.isVerified ? (
                 <button onClick={verifyAccount} className="verify-btn">
                   Not Verify
                 </button>

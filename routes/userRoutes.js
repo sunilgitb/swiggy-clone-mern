@@ -26,7 +26,7 @@ router.route('/verify-account/:id/:token').post(verifyUserAccount);
 
 // Private
 router.route('/change-password').post(verifyUser, changePassword);
-router.route('/current-user').get(verifyUser, getUser);
+router.route('/current-user').post(verifyUser, getUser);
 router
   .route('/send-email-verify-account')
   .post(verifyUser, sendVerifyUserAccountEmail);
