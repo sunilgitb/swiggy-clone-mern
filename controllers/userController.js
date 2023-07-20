@@ -99,7 +99,7 @@ const loginUser = async (req, res) => {
       .cookie('token', accessToken, {
         httpOnly: true,
         expiresIn: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        // secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production',
       })
       .status(200)
       .json({
@@ -108,6 +108,7 @@ const loginUser = async (req, res) => {
           user: {
             name: user.name,
             email: user.email,
+            token: accessToken,
             id: user._id,
           },
         },
@@ -121,12 +122,30 @@ const loginUser = async (req, res) => {
 };
 
 const loginWithToken = async (req, res) => {
-  const token = req?.cookies?.token;
-  // console.log(token);
-  res.status(200).json({
-    status: 'success',
-    data: {},
-  });
+  const { token } = req.body;
+  if (!token) {
+    res.status(401).json({
+      status: 'fail',
+      message: 'Token expired, Login again!',
+    });
+  }
+  try {
+    const { payload } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {
+      complete: true,
+    });
+    const user = await User.findById(payload?.id).select('-password');
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      message: 'Something went wrong!',
+    });
+  }
 };
 
 const changePassword = async (req, res) => {

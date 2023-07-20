@@ -14,6 +14,7 @@ import { updateCart } from './redux/slice/cartSlice';
 import Profile from './pages/Profile/Profile';
 import axios from 'axios';
 import { LOGIN_WITH_TOKEN_API_LINK } from './utils/config';
+import { login } from './redux/slice/authSlice';
 
 const AppLayout = () => {
   const cart = useSelector(state => state.cart.items);
@@ -28,8 +29,13 @@ const AppLayout = () => {
     dispatch(updateCart(cartData));
   };
   const loginWithToken = async () => {
-    const { data } = await axios.get(LOGIN_WITH_TOKEN_API_LINK);
-    console.log(data);
+    const token = window.localStorage.getItem('token') || '';
+    try {
+      const { data } = await axios.post(LOGIN_WITH_TOKEN_API_LINK, { token });
+      dispatch(login(data?.data?.user));
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     getCartToLocalStorage();

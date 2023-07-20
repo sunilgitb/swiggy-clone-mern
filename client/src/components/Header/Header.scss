@@ -421,7 +421,13 @@
     justify-content: space-between;
     position: relative;
     .active-nav {
-      fill: #000;
+      svg {
+        stroke: var(--color-red);
+        fill: var(--color-red);
+      }
+      .text {
+        color: var(--color-red) !important;
+      }
     }
     .nav-bottom-btn {
       height: 100%;

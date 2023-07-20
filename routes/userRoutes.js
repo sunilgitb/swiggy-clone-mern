@@ -18,7 +18,7 @@ const router = express.Router();
 // Public
 router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
-router.route('/login-with-token').get(loginWithToken);
+router.route('/login-with-token').post(loginWithToken);
 router.route('/logout').get(logoutUser);
 router.route('/send-email-reset-password').post(sendUserPasswordResetEmail);
 router.route('/reset-password/:id/:token').post(userPasswordReset);

@@ -29,20 +29,11 @@ const Profile = () => {
       await axios.get(LOGOUT_API_LINK);
       dispatch(logout());
       dispatch(updateSigninSideVisible(true));
+      window.localStorage.removeItem('token');
     } catch (error) {
       console.log(error);
       Swal.fire('Failed!', error.message, 'error');
     }
-    // signOut(auth)
-    //   .then(() => {
-    //     // Sign-out successful.
-    //     dispatch(logout());
-    //     dispatch(updateSigninSideVisible(true));
-    //   })
-    //   .catch(error => {
-    //     // An error happened.
-    //     Swal.fire('Failed!', error.message, 'error');
-    //   });
   };
 
   useEffect(() => {

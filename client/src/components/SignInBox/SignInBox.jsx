@@ -40,14 +40,8 @@ const SignInBox = () => {
     setIsLoggingIn('emailpass');
     try {
       const { data } = await axios.post(LOGIN_API_LINK, state);
-      dispatch(
-        login({
-          name: data?.data?.user?.name,
-          email: data?.data?.user?.email,
-          isVerified: data?.data?.user?.isVerified,
-          id: data?.data?.id,
-        })
-      );
+      dispatch(login(data?.data?.user));
+      window.localStorage.setItem('token', data?.data?.user?.token);
       setIsLoggingIn('');
       dispatch(updateSigninSideVisible(false));
       Swal.fire('Success!', `You're log in successfully!`, 'success');
