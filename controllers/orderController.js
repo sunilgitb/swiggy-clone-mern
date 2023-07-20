@@ -1,4 +1,5 @@
 const User = require('../model/userModel');
+const transporter = require('./../config/emailConfig');
 const { orderCompleteMail } = require('./../config/mailGen');
 
 const orderController = async (req, res) => {
@@ -24,9 +25,10 @@ const orderController = async (req, res) => {
       { orderList: [...user.orderList, ...orderListNew] }
     );
 
-    const link = `${process.env.RESET_PASSWORD_HOST}/account`;
+    // const link = `${process.env.RESET_PASSWORD_HOST}/account`;
 
-    const emailBody = orderCompleteMail(user, link, orderListNew);
+    const emailBody = orderCompleteMail(user, orderListNew);
+
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: user.email,

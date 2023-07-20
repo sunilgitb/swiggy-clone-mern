@@ -1,6 +1,6 @@
 const Mailgen = require('mailgen');
 
-const orderCompleteMail = (userData, _, orderList) => {
+const orderCompleteMail = (userData, orderList) => {
   const mailGenerator = new Mailgen({
     theme: 'salted',
     product: {
@@ -43,6 +43,7 @@ const orderCompleteMail = (userData, _, orderList) => {
   const emailBody = mailGenerator.generate(email);
   return emailBody;
 };
+
 const verifyAccountMail = (userData, link) => {
   const mailGenerator = new Mailgen({
     theme: 'salted',

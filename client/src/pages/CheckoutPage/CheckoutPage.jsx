@@ -86,7 +86,6 @@ const CheckoutPage = () => {
 
       await axios.post(ORDER_API_LINK, {
         token: window.localStorage.getItem('token'),
-        userData,
         orderList: arr.map(el => {
           return {
             ...el,
