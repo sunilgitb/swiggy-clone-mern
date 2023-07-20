@@ -85,6 +85,7 @@ const CheckoutPage = () => {
       });
 
       await axios.post('https://swiggy-clone-wjqx.onrender.com/api/v1/order', {
+        token: window.localStorage.getItem('token'),
         userData,
         orderList: arr.map(el => {
           return {
