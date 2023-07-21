@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const User = require('../model/userModel');
 const transporter = require('./../config/emailConfig');
 const { orderCompleteMail } = require('./../config/mailGen');
@@ -20,9 +21,15 @@ const orderController = async (req, res) => {
         message: `Please verify your account to place order!`,
       });
     }
+    const randomString = crypto.randomBytes(16).toString('hex');
     await User.updateOne(
       { _id: id },
-      { orderList: [...user.orderList, ...orderListNew] }
+      {
+        orderList: [
+          ...user.orderList,
+          { list: orderListNew, orderNo: randomString },
+        ],
+      }
     );
 
     // const link = `${process.env.RESET_PASSWORD_HOST}/account`;
