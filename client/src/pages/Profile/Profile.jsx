@@ -146,7 +146,8 @@ const Profile = () => {
                   .map(or => (
                     <div key={uuidv4()}>
                       <div className="order-no">
-                        Order #{or?.orderNo} - {or?.date?.toDateString()}
+                        Order #{or?.orderNo} -{' '}
+                        {new Date(or?.date).toDateString()}
                       </div>
                       <ol className="list">
                         {or?.list?.slice(0, -3).map(el => (
