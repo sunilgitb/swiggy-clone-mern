@@ -32,10 +32,10 @@ const Profile = () => {
       Swal.fire('Failed!', error.message, 'error');
     }
   };
-  console.log(authData);
   const logoutFunc = async () => {
     try {
       await axios.get(LOGOUT_API_LINK);
+      navigate('/');
       dispatch(logout());
       dispatch(updateSigninSideVisible(true));
       window.localStorage.removeItem('token');

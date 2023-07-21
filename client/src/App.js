@@ -37,7 +37,7 @@ const AppLayout = () => {
       dispatch(login(data?.data?.user));
       dispatch(updateSigninSideVisible(false));
     } catch (error) {
-      dispatch(updateSigninSideVisible(true));
+      // dispatch(updateSigninSideVisible(true));
       // console.log(error);
     }
   };

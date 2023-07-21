@@ -14,7 +14,7 @@ const orderCompleteMail = (userData, orderList, orderNo) => {
   const email = {
     body: {
       name: userData.name,
-      intro: `Your order no. ${orderNo} has been processed successfully.`,
+      intro: `Your order no. #${orderNo} has been processed successfully.`,
       table: {
         data: orderList,
         columns: {
