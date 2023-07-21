@@ -27,14 +27,14 @@ const orderController = async (req, res) => {
       {
         orderList: [
           ...user.orderList,
-          { list: orderListNew, orderNo: randomString },
+          { list: orderListNew, orderNo: randomString, date: new Date() },
         ],
       }
     );
 
     // const link = `${process.env.RESET_PASSWORD_HOST}/account`;
 
-    const emailBody = orderCompleteMail(user, orderListNew);
+    const emailBody = orderCompleteMail(user, orderListNew, randomString);
 
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,

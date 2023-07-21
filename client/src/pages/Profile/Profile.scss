@@ -93,6 +93,35 @@
           background: var(--color-white);
         }
       }
+      .right {
+        width: 100%;
+        padding: 2rem;
+        .order-wrapper {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          flex-direction: column;
+          & > div {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            .order-no {
+              width: 100%;
+              font-size: 2rem;
+              padding-bottom: 5px;
+              margin-bottom: 5px;
+              border-bottom: 1px dashed var(--color-dark-grey);
+              font-weight: 600;
+              color: var(--color-grey-black);
+            }
+            .list {
+              margin-left: 3rem;
+              font-size: 1.7rem;
+              color: var(--color-grey-black);
+            }
+          }
+        }
+      }
     }
   }
 }

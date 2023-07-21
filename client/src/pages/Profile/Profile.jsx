@@ -14,6 +14,7 @@ import {
 import { BsHandbag } from 'react-icons/bs';
 import { AiFillCreditCard } from 'react-icons/ai';
 import { GoLocation } from 'react-icons/go';
+import { v4 as uuidv4 } from 'uuid';
 
 const Profile = () => {
   const authData = useSelector(state => state.auth);
@@ -136,7 +137,30 @@ const Profile = () => {
               <span>Addresses</span>
             </Link>
           </div>
-          <div className="right"></div>
+          <div className="right">
+            {tab === 'orders' && (
+              <div className="order-wrapper">
+                {authData?.user?.orderList
+                  ?.slice()
+                  ?.reverse()
+                  .map(or => (
+                    <div key={uuidv4()}>
+                      <div className="order-no">
+                        Order #{or?.orderNo} - {or?.date?.toDateString()}
+                      </div>
+                      <ol className="list">
+                        {or?.list?.slice(0, -3).map(el => (
+                          <li className="order-list" key={uuidv4()}>
+                            {el?.name} X {el?.quantity} = ₹
+                            {el?.price?.slice(1) * el?.quantity}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
