@@ -21,7 +21,7 @@ const orderController = async (req, res) => {
         message: `Please verify your account to place order!`,
       });
     }
-    const randomString = crypto.randomBytes(16).toString('hex');
+    const randomString = crypto.randomBytes(8).toString('hex');
     await User.updateOne(
       { _id: id },
       {
