@@ -10,7 +10,7 @@ import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import Offers from './pages/Offers/Offers';
 import Search from './pages/Search/Search';
 import { useEffect } from 'react';
-import { updateCart } from './redux/slice/cartSlice';
+import { updateCart, updateRest } from './redux/slice/cartSlice';
 import Profile from './pages/Profile/Profile';
 import axios from 'axios';
 import { LOGIN_WITH_TOKEN_API_LINK } from './utils/config';
@@ -20,15 +20,25 @@ import { updateSigninSideVisible } from './redux/slice/loginSlice';
 
 const AppLayout = () => {
   const cart = useSelector(state => state.cart.items);
+  const restaurant = useSelector(state => state.cart.restaurant);
   const dispatch = useDispatch();
   const setCartToLocalStorage = () => {
     window.localStorage.setItem('sw_cart_data', JSON.stringify(cart));
+    window.localStorage.setItem('sw_res_data', JSON.stringify(restaurant));
   };
   const getCartToLocalStorage = () => {
     const cartData = window.localStorage.getItem('sw_cart_data')
       ? JSON.parse(window.localStorage.getItem('sw_cart_data'))
       : [];
+    const resDetails = window.localStorage.getItem('sw_res_data')
+      ? JSON.parse(window.localStorage.getItem('sw_res_data'))
+      : {
+          restaurantId: '',
+          details: {},
+        };
+
     dispatch(updateCart(cartData));
+    dispatch(updateRest(resDetails));
   };
   const loginWithToken = async () => {
     const token = window.localStorage.getItem('token') || '';

@@ -24,9 +24,18 @@ const Offers = () => {
       const { data } = await axios.get(
         `https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=${locationData?.lat}&lng=${locationData?.lng}&page_type=DESKTOP_WEB_LISTING`
       );
-      setCarousels(data?.data?.cards?.[0]?.data?.data?.cards);
-      setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
-      setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
+      setCarousels(
+        data?.data?.cards?.[0]?.data?.data?.cards ||
+          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards
+      );
+      setAllRestaurants(
+        data?.data?.cards?.[2]?.data?.data?.cards ||
+          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+      );
+      setFilterAllRestaurants(
+        data?.data?.cards?.[2]?.data?.data?.cards ||
+          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
+      );
     } catch (err) {
       try {
         setCarousels(staticRestaurant?.data?.cards?.[0]?.data?.data?.cards);

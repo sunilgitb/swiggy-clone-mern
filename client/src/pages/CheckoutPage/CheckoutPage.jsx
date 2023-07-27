@@ -3,7 +3,11 @@ import PaddingTop from '../../utils/PaddingTop';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { IMG_LINK, ORDER_API_LINK } from '../../utils/config';
+import {
+  IMG_LINK,
+  ORDER_API_LINK,
+  RESTAURANT_DETAILS_API,
+} from '../../utils/config';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 import {
   clearCart,
@@ -23,7 +27,7 @@ import Swal from 'sweetalert2';
 import { updateSigninSideVisible } from '../../redux/slice/loginSlice';
 import { sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../auth/firebase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { CiLocationOn } from 'react-icons/ci';
@@ -33,6 +37,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const CheckoutPage = () => {
   const cart = useSelector(state => state.cart.items);
+  const cartRestaurant = useSelector(state => state.cart.restaurant);
   const locationData = useSelector(state => state.location.location);
   const itemTotal =
     cart?.reduce((acc, el) => {
@@ -209,6 +214,7 @@ const CheckoutPage = () => {
     }
     sendEmailHandler();
   };
+
   if (cart.length === 0) {
     return (
       <PaddingTop>
@@ -235,6 +241,7 @@ const CheckoutPage = () => {
       </PaddingTop>
     );
   }
+
   return (
     <div className="checkout-wrapper">
       <div className="checkout">
@@ -340,7 +347,6 @@ const CheckoutPage = () => {
                     </div>
                   </div>
                 ))}
-                {/* TODO */}
                 <div
                   onClick={() => {
                     setIsPlaceBoxVisible(true);
@@ -474,13 +480,15 @@ const CheckoutPage = () => {
             <div className="hotel">
               <img
                 className="hotel-img"
-                src="https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/drgphrpjbnqcwjsxaiod"
-                alt="hotel"
+                src={`https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_100,h_100,c_fill/${cartRestaurant?.details?.img}`}
+                alt={cartRestaurant?.details?.name}
               />
               <div className="hotel-info">
                 <div className="top">
-                  <div className="name">Rajdhani Hotel</div>
-                  <div className="address">Fraser Road</div>
+                  <div className="name">{cartRestaurant?.details?.name}</div>
+                  <div className="address">
+                    {cartRestaurant?.details?.place}
+                  </div>
                 </div>
                 <div className="bottom"></div>
               </div>
