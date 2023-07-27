@@ -112,6 +112,7 @@ const Home = () => {
     getRestaurantMore();
   }, []);
   useEffect(() => {
+    if (!isSwiggyApiWorking) return;
     setAllRestaurants([]);
     setFilterAllRestaurants([]);
     getAllRestaurants();
