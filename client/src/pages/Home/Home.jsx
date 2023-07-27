@@ -7,7 +7,7 @@ import { ALL_RESTAURANTS_API_LINK } from '../../utils/config';
 import Loading from '../../components/Loading/Loading';
 import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
-import staticRestaurant from './../../utils/restaurantList';
+import staticRestaurant, { restaurantList } from './../../utils/restaurantList';
 import Main from '../../components/Main/Main';
 import { useSelector } from 'react-redux';
 import FloatingCart from '../../components/FloatingCart/FloatingCart';
@@ -21,6 +21,7 @@ const Home = () => {
   const [notFound, setNotFound] = useState(false);
   const [offset, setOffset] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSwiggyApiWorking, setIsSwiggyApiWorking] = useState(true);
   const [totalOpenRestaurants, setTotalOpenRestaurants] = useState(0);
   document.title = `Swiggy Clone - Vivek Kumar`;
 
@@ -31,7 +32,7 @@ const Home = () => {
       const { data } = await axios.get(
         `https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=${locationData?.lat}&lng=${locationData?.lng}&page_type=DESKTOP_WEB_LISTING`
       );
-      setCarousels(data?.data?.cards?.[0]?.data?.data?.cards);
+      setCarousels(data?.data?.cards?.[0]?.data?.data?.cards || []);
       // setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
       // setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
       setTotalOpenRestaurants(
@@ -39,9 +40,22 @@ const Home = () => {
           el => el.cardType === 'seeAllRestaurants'
         )?.[0]?.data?.data?.totalOpenRestaurants
       );
+      if (
+        !data?.data?.cards?.filter(
+          el => el.cardType === 'seeAllRestaurants'
+        )?.[0]?.data?.data?.totalOpenRestaurants
+      ) {
+        setIsSwiggyApiWorking(false);
+        setCarousels(
+          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards || []
+        );
+        setTotalOpenRestaurants(restaurantList?.totalOpenRestaurants);
+      }
     } catch (err) {
       try {
-        setCarousels(staticRestaurant?.data?.cards?.[0]?.data?.data?.cards);
+        setCarousels(
+          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards || []
+        );
         // setAllRestaurants(
         // 	staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
         // );
@@ -68,6 +82,10 @@ const Home = () => {
         ...prev,
         ...data?.data?.cards.map(el => el.data),
       ]);
+      if (!totalOpenRestaurants) {
+        setAllRestaurants(restaurantList?.cards);
+        setFilterAllRestaurants(restaurantList?.cards);
+      }
       setIsLoading(false);
     } catch (err) {
       setApiFaildes(err);
@@ -101,6 +119,7 @@ const Home = () => {
   }, [locationData]);
 
   useEffect(() => {
+    if (!isSwiggyApiWorking) return;
     getRestaurantMore();
   }, [offset]);
 

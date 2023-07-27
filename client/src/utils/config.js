@@ -32,5 +32,9 @@ export const VERIFY_ACC_API_LINK =
   'https://swiggy-clone-wjqx.onrender.com/api/v1/user/verify-account';
 export const SEND_VERIFY_ACC_API_LINK =
   'https://swiggy-clone-wjqx.onrender.com/api/v1/user/send-email-verify-account';
+export const USER_ADDRESS_API_LINK =
+  'https://swiggy-clone-wjqx.onrender.com/api/v1/user/address';
 export const ORDER_API_LINK =
   'https://swiggy-clone-wjqx.onrender.com/api/v1/order';
+export const COUPON_API_LINK =
+  'https://www.swiggy.com/dapi/offers/payment?lat=25.6039168&lng=85.1360248&restaurantId=238672&cart_value=504&restaurant_id=238672&sourcePage=cart&source_page=cart';

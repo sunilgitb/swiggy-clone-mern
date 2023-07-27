@@ -244,7 +244,7 @@ const Header = () => {
 
       {(isSigninSideVisible || isPlaceBoxVisible) && (
         <div
-          onClick={e => {
+          onClick={() => {
             setIsPlaceBoxVisible(false);
             dispatch(updateSigninSideVisible(false));
           }}

@@ -356,6 +356,45 @@ const logoutUser = async (req, res) => {
   });
 };
 
+const addUserAddress = async (req, res) => {
+  const { lat, lng, place_type, formatted_address } = req.body;
+  if (!lat || !lng || !place_type || !formatted_address) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Provide correct address!',
+    });
+  }
+  try {
+    const user = await User.findById(req.body.id);
+    const idx = user.address.findIndex(el => el.lat === lat && el.lng === lng);
+    if (idx >= 0) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Address already exists!',
+      });
+    }
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.body.id },
+      {
+        address: [...user.address, { lat, lng, place_type, formatted_address }],
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      status: 'success',
+      message: 'Address added successfully!',
+      data: {
+        user: updatedUser,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'fail',
+      message: 'Something went wrong!',
+    });
+  }
+};
+
 module.exports = {
   getUser,
   registerUser,
@@ -367,4 +406,5 @@ module.exports = {
   sendVerifyUserAccountEmail,
   verifyUserAccount,
   logoutUser,
+  addUserAddress,
 };

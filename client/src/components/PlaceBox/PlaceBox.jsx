@@ -5,9 +5,11 @@ import { CiLocationOn } from 'react-icons/ci';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { changeLocation } from '../../redux/slice/locationSlice';
+import { USER_ADDRESS_API_LINK } from '../../utils/config';
+import { login } from '../../redux/slice/authSlice';
 
 let timestamp;
-const PlaceBox = ({ setIsPlaceBoxVisible }) => {
+const PlaceBox = ({ setIsPlaceBoxVisible, isCheckoutPage }) => {
   const [state, setState] = useState({
     area: '',
   });
@@ -37,6 +39,18 @@ const PlaceBox = ({ setIsPlaceBoxVisible }) => {
           formatted_address: data?.data?.[0]?.formatted_address,
         })
       );
+      if (isCheckoutPage) {
+        const { data: userUpdatedData } = await axios.post(
+          USER_ADDRESS_API_LINK,
+          {
+            ...data?.data?.[0]?.geometry?.location,
+            place_type: data?.data?.[0]?.place_type,
+            formatted_address: data?.data?.[0]?.formatted_address,
+            token: window.localStorage.getItem('token') || '',
+          }
+        );
+        dispatch(login(userUpdatedData?.data?.user));
+      }
       window.localStorage.setItem(
         'locationInfo',
         JSON.stringify({

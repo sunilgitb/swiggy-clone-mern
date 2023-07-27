@@ -10,6 +10,7 @@ const {
   sendVerifyUserAccountEmail,
   verifyUserAccount,
   logoutUser,
+  addUserAddress,
 } = require('../controllers/userController.js');
 const verifyUser = require('../middleware/verifyUser.js');
 
@@ -27,6 +28,7 @@ router.route('/verify-account/:id/:token').post(verifyUserAccount);
 // Private
 router.route('/change-password').post(verifyUser, changePassword);
 router.route('/current-user').post(verifyUser, getUser);
+router.route('/address').post(verifyUser, addUserAddress);
 router
   .route('/send-email-verify-account')
   .post(verifyUser, sendVerifyUserAccountEmail);
