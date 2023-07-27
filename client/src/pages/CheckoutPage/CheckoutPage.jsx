@@ -94,7 +94,7 @@ const CheckoutPage = () => {
       await sendEmailVerification(auth.currentUser);
       Swal.fire('Check email!', `Verification send to email!`, 'success');
     } catch (error) {
-      Swal.fire('Failed!', error.message, 'error');
+      // Swal.fire('Failed!', error.message, 'error');
     }
   };
   const sendEmailHandler = async () => {
@@ -155,7 +155,7 @@ const CheckoutPage = () => {
       });
     } catch (error) {
       setIsOrdering(false);
-      Swal.fire('Failed!', error.message, 'error');
+      // Swal.fire('Failed!', error.message, 'error');
     }
   };
   const paymentHandler = e => {
@@ -202,7 +202,7 @@ const CheckoutPage = () => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Verify!',
-        cancelButtonAriaLabel: 'Order anyway!',
+        cancelButtonText: 'Order anyway!',
       }).then(result => {
         if (result.isConfirmed) {
           verifyAccount();
