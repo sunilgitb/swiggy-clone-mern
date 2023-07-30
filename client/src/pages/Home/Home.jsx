@@ -19,72 +19,33 @@ const Home = () => {
   const [activeFilter, setActiveFilter] = useState('relevance');
   const [apiFailed, setApiFaildes] = useState('');
   const [notFound, setNotFound] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [isAllDataEnd, setIsAllDataEnd] = useState(false);
+  const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSwiggyApiWorking, setIsSwiggyApiWorking] = useState(true);
   const [totalOpenRestaurants, setTotalOpenRestaurants] = useState(0);
   document.title = `Swiggy Clone - Vivek Kumar`;
 
   const locationData = useSelector(state => state.location.location);
   const searchText = useSelector(state => state.search.text);
-  const getAllRestaurants = async () => {
-    try {
-      const { data } = await axios.get(
-        `https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=${locationData?.lat}&lng=${locationData?.lng}&page_type=DESKTOP_WEB_LISTING`
-      );
-      setCarousels(data?.data?.cards?.[0]?.data?.data?.cards || []);
-      // setAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
-      // setFilterAllRestaurants(data?.data?.cards?.[2]?.data?.data?.cards);
-      setTotalOpenRestaurants(
-        data?.data?.cards?.filter(
-          el => el.cardType === 'seeAllRestaurants'
-        )?.[0]?.data?.data?.totalOpenRestaurants
-      );
-      if (
-        !data?.data?.cards?.filter(
-          el => el.cardType === 'seeAllRestaurants'
-        )?.[0]?.data?.data?.totalOpenRestaurants
-      ) {
-        setIsSwiggyApiWorking(false);
-        setCarousels(
-          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards || []
-        );
-        setTotalOpenRestaurants(restaurantList?.totalOpenRestaurants);
-      }
-    } catch (err) {
-      try {
-        setCarousels(
-          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards || []
-        );
-        // setAllRestaurants(
-        // 	staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-        // );
-        // setFilterAllRestaurants(
-        // 	staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-        // );
-      } catch (err) {
-        setApiFaildes(err);
-      }
-    }
-    window.scrollTo(0, 0);
-  };
+
   const getRestaurantMore = async () => {
+    if (isAllDataEnd) return;
+
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=${locationData?.lat}&lng=${locationData?.lng}&offset=${offset}&sortBy=RELEVANCE&pageType=SEE_ALL&page_type=DESKTOP_SEE_ALL_LISTING`
+        `https://swiggy-clone-wjqx.onrender.com/api/v1/restaurant?location=${locationData.location}&page=${page}`
       );
-      setAllRestaurants(prev => [
-        ...prev,
-        ...data?.data?.cards.map(el => el.data),
-      ]);
-      setFilterAllRestaurants(prev => [
-        ...prev,
-        ...data?.data?.cards.map(el => el.data),
-      ]);
-      if (!totalOpenRestaurants) {
-        setAllRestaurants(restaurantList?.cards);
-        setFilterAllRestaurants(restaurantList?.cards);
+      if (page === 0) {
+        setAllRestaurants(data?.data);
+        setFilterAllRestaurants(data?.data);
+        setTotalOpenRestaurants(data?.total);
+      } else {
+        setAllRestaurants(prev => [...prev, ...data?.data]);
+        setFilterAllRestaurants(prev => [...prev, ...data?.data]);
+      }
+      if (data?.data?.length === 0) {
+        setIsAllDataEnd(true);
       }
       setIsLoading(false);
     } catch (err) {
@@ -93,12 +54,56 @@ const Home = () => {
     }
   };
 
+  const filterRestaurantWithActiveFilter = activeFilter => {
+    switch (activeFilter) {
+      case 'relevance':
+        setFilterAllRestaurants(allRestaurants.slice());
+        break;
+      case 'delivery-time':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort((a, b) => a.info.sla.deliveryTime - b.info.sla.deliveryTime)
+        );
+        break;
+      case 'rating':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort((a, b) => b.info.avgRating - a.info.avgRating)
+        );
+        break;
+      case 'lowtohigh':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort(
+              (a, b) =>
+                a.info.costForTwo.split(' ')[0].slice(1) -
+                b.info.costForTwo.split(' ')[0].slice(1)
+            )
+        );
+        break;
+      case 'hightolow':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort(
+              (a, b) =>
+                b.info.costForTwo.split(' ')[0].slice(1) -
+                a.info.costForTwo.split(' ')[0].slice(1)
+            )
+        );
+        break;
+    }
+  };
+
   const handleScroll = async () => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       document.documentElement.scrollHeight
     ) {
-      setOffset(prev => prev + 16);
+      setPage(prev => prev + 1);
     }
   };
 
@@ -106,23 +111,27 @@ const Home = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  useEffect(() => {
+    axios
+      .get('https://swiggy-clone-wjqx.onrender.com/api/v1/restaurant/carousel')
+      .then(({ data }) => {
+        setCarousels(data.data.carousel);
+      });
+  }, []);
 
   useEffect(() => {
-    getAllRestaurants();
     getRestaurantMore();
-  }, []);
+  }, [page]);
+
   useEffect(() => {
-    if (!isSwiggyApiWorking) return;
-    setAllRestaurants([]);
-    setFilterAllRestaurants([]);
-    getAllRestaurants();
+    setIsAllDataEnd(false);
+    setPage(0);
     getRestaurantMore();
   }, [locationData]);
 
   useEffect(() => {
-    if (!isSwiggyApiWorking) return;
-    getRestaurantMore();
-  }, [offset]);
+    filterRestaurantWithActiveFilter(activeFilter);
+  }, [activeFilter]);
 
   useEffect(() => {
     if (searchText.trim() === '') {
@@ -144,7 +153,7 @@ const Home = () => {
     return <Error {...apiFailed} />;
   }
 
-  return filterAllRestaurants?.length === 0 ? (
+  return isLoading ? (
     <PaddingTop>
       <div className="carousel-loading-wrapper">
         <div className="carousel-loading">

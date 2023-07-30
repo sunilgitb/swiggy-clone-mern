@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   IMG_LINK,
+  LOGIN_WITH_TOKEN_API_LINK,
   ORDER_API_LINK,
   RESTAURANT_DETAILS_API,
 } from '../../utils/config';
@@ -34,6 +35,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { MdPayment } from 'react-icons/md';
 import PlaceBox from '../../components/PlaceBox/PlaceBox';
 import { AnimatePresence, motion } from 'framer-motion';
+import { login } from '../../redux/slice/authSlice';
 
 const CheckoutPage = () => {
   const cart = useSelector(state => state.cart.items);
@@ -68,8 +70,8 @@ const CheckoutPage = () => {
   const initialSelectedAdd = {
     lat: '',
     lng: '',
-    place_type: '',
-    formatted_address: '',
+    location: '',
+    more_info: '',
   };
   const [selectedAddress, setSelectedAddress] = useState(initialSelectedAdd);
 
@@ -214,7 +216,6 @@ const CheckoutPage = () => {
     }
     sendEmailHandler();
   };
-
   if (cart.length === 0) {
     return (
       <PaddingTop>
@@ -274,15 +275,15 @@ const CheckoutPage = () => {
           </button>
         </div>
         {/* Left Location */}
-        {isPlaceBoxVisible && (
+        {/* {isPlaceBoxVisible && (
           <div
             onClick={() => {
               setIsPlaceBoxVisible(false);
             }}
             className="black-mask"></div>
-        )}
+        )} */}
         <div>
-          <AnimatePresence onExitComplete={true}>
+          <AnimatePresence onExitComplete={() => true}>
             {isPlaceBoxVisible && (
               <motion.div
                 initial={{
@@ -338,8 +339,13 @@ const CheckoutPage = () => {
                     <div className="top">
                       <CiLocationOn className="icon-ad" />
                       <div className="right">
-                        <div>{addressData?.place_type}</div>
-                        <div>{addressData?.formatted_address}</div>
+                        <div>
+                          {addressData?.location
+                            ?.split('')
+                            .map((el, i) => (i === 0 ? el.toUpperCase() : el))
+                            .join('')}
+                        </div>
+                        <div>{addressData?.more_info}</div>
                       </div>
                     </div>
                     <div className="bottom">
@@ -349,15 +355,49 @@ const CheckoutPage = () => {
                 ))}
                 <div
                   onClick={() => {
-                    setIsPlaceBoxVisible(true);
-                    setSelectedAddress(initialSelectedAdd);
+                    const token = window.localStorage.getItem('token') || '';
+                    axios
+                      .post(
+                        `https://swiggy-clone-wjqx.onrender.com/api/v1/user/address`,
+                        {
+                          lat: locationData.lat,
+                          lng: locationData.lng,
+                          location: locationData.location,
+                          token: token,
+                        }
+                      )
+                      .then(({ data }) => {
+                        axios
+                          .post(LOGIN_WITH_TOKEN_API_LINK, { token })
+                          .then(({ data }) => {
+                            dispatch(login(data?.data?.user));
+                          });
+                        Swal.fire({
+                          title: 'Address added',
+                          text: 'Address added successfully!',
+                          icon: 'success',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                        }).then(result => {
+                          setSelectedAddress(initialSelectedAdd);
+                        });
+                      })
+                      .catch(e => {
+                        Swal.fire('Failed!', e.response.data.message, 'error');
+                      });
                   }}
                   className="address-box">
                   <div className="top">
                     <CiLocationOn className="icon-ad" />
                     <div className="right">
                       <div>Add New Address</div>
-                      <div>{locationData?.formatted_address}</div>
+                      <div>
+                        {locationData?.location
+                          ?.split('')
+                          .map((el, i) => (i === 0 ? el.toUpperCase() : el))
+                          .join('')}
+                      </div>
                     </div>
                   </div>
                   <div className="bottom">

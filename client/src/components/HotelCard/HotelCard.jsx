@@ -6,63 +6,58 @@ import { ReactComponent as OffersIcon } from './../../assets/icons/offers.svg';
 import { Link } from 'react-router-dom';
 
 const HotelCard = ({ hotel }) => {
-	return (
-		<Link
-			to={`/restaurants/${hotel?.data?.slugs?.restaurant}-${hotel?.data?.id}`}
-			className="hotel-card-wrapper">
-			{hotel?.data?.promoted && (
-				<div className="promotion-tag">
-					<div className="text">PROMOTED</div>
-					<div className="style"></div>
-				</div>
-			)}
-			<div className="hotel-card">
-				{hotel?.data?.cloudinaryImageId ? (
-					<img
-						src={IMG_LINK + hotel?.data?.cloudinaryImageId}
-						alt={hotel?.data?.name}
-					/>
-				) : (
-					<div className="img-cover">NO COVER IMAGE</div>
-				)}
+  return (
+    <Link
+      to={`/${hotel?.cta?.link?.replace('https://www.swiggy.com/', '')}`}
+      className="hotel-card-wrapper">
+      {hotel?.data?.promoted && (
+        <div className="promotion-tag">
+          <div className="text">PROMOTED</div>
+          <div className="style"></div>
+        </div>
+      )}
+      <div className="hotel-card">
+        {hotel?.info?.cloudinaryImageId ? (
+          <img
+            src={IMG_LINK + hotel?.info?.cloudinaryImageId}
+            alt={hotel?.info?.name}
+          />
+        ) : (
+          <div className="img-cover">NO COVER IMAGE</div>
+        )}
 
-				<div className="title">
-					<span>{hotel?.data?.name}</span>
-					<span>{hotel?.data?.cuisines?.join(', ')}</span>
-				</div>
-				<div className="rating">
-					<span
-						style={{
-							background:
-								hotel?.data?.avgRating >= 4
-									? 'var(--color-green)'
-									: 'var(--color-yellow)',
-						}}>
-						<AiFillStar className="icon" />
-						<span>{hotel?.data?.avgRating}</span>
-					</span>
-					<BsDot />
-					<span>{hotel?.data?.slaString}</span>
-					<BsDot />
+        <div className="title">
+          <span>{hotel?.info?.name}</span>
+          <span>{hotel?.info?.cuisines?.join(', ')}</span>
+        </div>
+        <div className="rating">
+          <span
+            style={{
+              background:
+                hotel?.info?.avgRating >= 4
+                  ? 'var(--color-green)'
+                  : 'var(--color-yellow)',
+            }}>
+            <AiFillStar className="icon" />
+            <span>{hotel?.info?.avgRating}</span>
+          </span>
+          <BsDot />
+          <span>{hotel?.info?.sla?.slaString}</span>
+          <BsDot />
 
-					<span>{hotel?.data?.costForTwoString}</span>
-				</div>
-				{hotel?.data?.aggregatedDiscountInfo?.shortDescriptionList?.[0]
-					?.meta && (
-					<div className="offer">
-						<OffersIcon className="icon" />
-						<span>
-							{
-								hotel?.data?.aggregatedDiscountInfo
-									?.shortDescriptionList?.[0]?.meta
-							}
-						</span>
-					</div>
-				)}
-				<div></div>
-			</div>
-		</Link>
-	);
+          <span>{hotel?.info?.costForTwo}</span>
+        </div>
+        {hotel?.info?.aggregatedDiscountInfoV3?.header && (
+          <div className="offer">
+            <OffersIcon className="icon" />
+            <span>{hotel?.info?.aggregatedDiscountInfoV3?.header}</span>
+            <span>{hotel?.info?.aggregatedDiscountInfoV3?.subHeader}</span>
+          </div>
+        )}
+        <div></div>
+      </div>
+    </Link>
+  );
 };
 
 export default HotelCard;

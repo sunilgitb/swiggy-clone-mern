@@ -2,10 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   location: JSON.parse(window.localStorage.getItem('locationInfo')) || {
-    lat: 25.5940947,
-    lng: 85.1375645,
-    place_type: 'Others',
-    formatted_address: 'Patna, Bihar',
+    location: 'patna',
+    lat: '25.603916',
+    lng: '85.1360248',
   },
 };
 const locationSlice = createSlice({

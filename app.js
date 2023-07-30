@@ -6,6 +6,7 @@ const env = require('dotenv');
 const corsOptions = require('./config/corsOptions');
 const userRoutes = require('./routes/userRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const restaurantRoutes = require('./routes/restaurantRoutes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ connectDB().then(() => {
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/order', orderRoutes);
+app.use('/api/v1/restaurant', restaurantRoutes);
 
 app.all('*', (req, res) => {
   res.status(400).json({

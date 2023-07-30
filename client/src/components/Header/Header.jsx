@@ -26,11 +26,10 @@ const Header = () => {
     state => state.loginBools.isSigninSideVisible
   );
   const dispatch = useDispatch();
-  const [isMobileNavVisible, setIsMobileNavVisible] = useState(false);
   const [isLoginScreen, setIsLoginScreen] = useState(true);
   const [isPlaceBoxVisible, setIsPlaceBoxVisible] = useState(false);
   const userAuth = useSelector(state => state.auth);
-  const locationData = useSelector(state => state.location.location);
+  const { location } = useSelector(state => state.location.location);
 
   return (
     <>
@@ -43,12 +42,12 @@ const Header = () => {
             <div onClick={() => setIsPlaceBoxVisible(true)} className="__left">
               <span className="type">
                 <CiLocationOn className="icon" />
-                {locationData?.place_type}
+                {location
+                  ?.split('')
+                  .map((el, i) => (i === 0 ? el.toUpperCase() : el))
+                  .join('')}
               </span>
               <div className="__left-location">
-                <p className="formated-address">
-                  {locationData?.formatted_address}
-                </p>
                 <span>
                   <VscChevronDown className="icon" />
                 </span>
@@ -289,7 +288,7 @@ const Header = () => {
         </div>
       </div>
       <div>
-        <AnimatePresence onExitComplete={true}>
+        <AnimatePresence onExitComplete={() => true}>
           {isPlaceBoxVisible && (
             <motion.div
               initial={{

@@ -357,8 +357,8 @@ const logoutUser = async (req, res) => {
 };
 
 const addUserAddress = async (req, res) => {
-  const { lat, lng, place_type, formatted_address } = req.body;
-  if (!lat || !lng || !place_type || !formatted_address) {
+  const { lat, lng, location } = req.body;
+  if (!lat || !lng || !location) {
     return res.status(400).json({
       status: 'fail',
       message: 'Provide correct address!',
@@ -376,7 +376,7 @@ const addUserAddress = async (req, res) => {
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.body.id },
       {
-        address: [...user.address, { lat, lng, place_type, formatted_address }],
+        address: [...user.address, { lat, lng, location }],
       },
       { new: true }
     );

@@ -52,9 +52,9 @@ const Search = () => {
   window.scrollTo(0, 0);
   const getCuisines = async () => {
     const { data } = await axios(
-      `https://corsproxy.io/?https://www.swiggy.com/dapi/landing/PRE_SEARCH?lat=${locationData?.lat}&lng=${locationData?.lng}`
+      `https://swiggy-clone-wjqx.onrender.com/api/v1/restaurant/pre-search`
     );
-    setCuisines(data?.data?.cards?.[1]?.card?.card?.imageGridCards?.info);
+    setCuisines(data.data);
   };
 
   const getSearchResults = async searchText => {
@@ -84,9 +84,11 @@ const Search = () => {
       }
     }, 1000);
   }, [searchText]);
+
   useEffect(() => {
     getCuisines();
   }, []);
+
   useEffect(() => {
     if (params.get('query')) {
       setSearchText(params.get('query'));

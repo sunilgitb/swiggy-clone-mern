@@ -2,17 +2,14 @@ import './Offers.scss';
 import PaddingTop from '../../utils/PaddingTop';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ALL_RESTAURANTS_API_LINK } from '../../utils/config';
 import Loading from '../../components/Loading/Loading';
 import { v4 as uuidv4 } from 'uuid';
 import Error from '../Error/Error';
-import staticRestaurant from '../../utils/restaurantList';
 import Main from '../../components/Main/Main';
 import FloatingCart from '../../components/FloatingCart/FloatingCart';
 import { useSelector } from 'react-redux';
 
 const Offers = () => {
-  const [carousels, setCarousels] = useState([]);
   const [allRestaurants, setAllRestaurants] = useState([]);
   const [filterAllRestaurants, setFilterAllRestaurants] = useState([]);
   const [activeFilter, setActiveFilter] = useState('relevance');
@@ -22,39 +19,67 @@ const Offers = () => {
   const getAllRestaurants = async () => {
     try {
       const { data } = await axios.get(
-        `https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=${locationData?.lat}&lng=${locationData?.lng}&page_type=DESKTOP_WEB_LISTING`
+        `https://swiggy-clone-wjqx.onrender.com/api/v1/restaurant?location=${locationData.location}&&page=0`
       );
-      setCarousels(
-        data?.data?.cards?.[0]?.data?.data?.cards ||
-          staticRestaurant?.data?.cards?.[0]?.data?.data?.cards
-      );
-      setAllRestaurants(
-        data?.data?.cards?.[2]?.data?.data?.cards ||
-          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-      );
-      setFilterAllRestaurants(
-        data?.data?.cards?.[2]?.data?.data?.cards ||
-          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-      );
+      setAllRestaurants(data?.data);
+      setFilterAllRestaurants(data?.data);
     } catch (err) {
-      try {
-        setCarousels(staticRestaurant?.data?.cards?.[0]?.data?.data?.cards);
-        setAllRestaurants(
-          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-        );
-        setFilterAllRestaurants(
-          staticRestaurant?.data?.cards?.[2]?.data?.data?.cards
-        );
-      } catch (err) {
-        setApiFaildes(err);
-      }
+      setApiFaildes(err);
     }
     window.scrollTo(0, 0);
   };
-  // console.log(allRestaurants);
+
+  const filterRestaurantWithActiveFilter = activeFilter => {
+    switch (activeFilter) {
+      case 'relevance':
+        setFilterAllRestaurants(allRestaurants.slice());
+        break;
+      case 'delivery-time':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort((a, b) => a.info.sla.deliveryTime - b.info.sla.deliveryTime)
+        );
+        break;
+      case 'rating':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort((a, b) => b.info.avgRating - a.info.avgRating)
+        );
+        break;
+      case 'lowtohigh':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort(
+              (a, b) =>
+                a.info.costForTwo.split(' ')[0].slice(1) -
+                b.info.costForTwo.split(' ')[0].slice(1)
+            )
+        );
+        break;
+      case 'hightolow':
+        setFilterAllRestaurants(
+          allRestaurants
+            .slice()
+            .sort(
+              (a, b) =>
+                b.info.costForTwo.split(' ')[0].slice(1) -
+                a.info.costForTwo.split(' ')[0].slice(1)
+            )
+        );
+        break;
+    }
+  };
+
   useEffect(() => {
     getAllRestaurants();
   }, []);
+
+  useEffect(() => {
+    filterRestaurantWithActiveFilter(activeFilter);
+  }, [activeFilter]);
 
   if (apiFailed) {
     return <Error {...apiFailed} />;
