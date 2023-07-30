@@ -192,7 +192,7 @@ const Search = () => {
           <LoadingFullRound />
         )}
       </div>
-      <FloatingCart />
+      {/* <FloatingCart /> */}
     </div>
   );
 };
